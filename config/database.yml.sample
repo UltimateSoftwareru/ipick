@@ -1,0 +1,14 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  username: kzenin
+  password: kzenin
+  host: localhost
+  template: template0
+
+<% %w(development test production).each do |env| %>
+<%= env %>:
+  <<: *default
+  database: backend_<%= env %>
+<% end %>
