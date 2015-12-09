@@ -26,6 +26,7 @@ class DeviseTokenAuthCreateOperators < ActiveRecord::Migration
       t.string   :confirmation_token
       t.datetime :confirmed_at
       t.datetime :confirmation_sent_at
+      t.string   :unconfirmed_email
 
       ## User Info
       t.string :email

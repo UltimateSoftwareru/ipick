@@ -26,13 +26,14 @@ class DeviseTokenAuthCreateCouriers < ActiveRecord::Migration
       t.string   :confirmation_token
       t.datetime :confirmed_at
       t.datetime :confirmation_sent_at
+      t.string   :unconfirmed_email
 
       ## User Info
       t.string :name
       t.string :nickname
       t.string :email
       t.attachment :picture
-      t.integer :transport_id, null: false
+      t.integer :transport_id
       t.integer :status
       t.string :phone
 

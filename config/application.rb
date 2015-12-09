@@ -6,7 +6,9 @@ Bundler.require(*Rails.groups)
 
 module Ipick
   class Application < Rails::Application
+    config.action_mailer.default_url_options = { host: Rails.application.secrets.url }
     config.active_record.raise_in_transactional_callbacks = true
+    config.autoload_paths += ["#{config.root}/app/models/users/", "#{config.root}/app/controllers/users/"]
     config.middleware.insert_before 0, "Rack::Cors", debug: true, logger: (-> { Rails.logger }) do
       allow do
         origins '*'

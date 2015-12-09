@@ -1,8 +1,5 @@
 class Operator < ActiveRecord::Base
-  devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :trackable, :validatable,
-          :confirmable, :omniauthable
-  include DeviseTokenAuth::Concerns::User
+  include Devisable
 
   has_many :complains
 
