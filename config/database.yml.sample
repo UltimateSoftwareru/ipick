@@ -2,13 +2,17 @@ default: &default
   adapter: postgresql
   encoding: utf8
   pool: 5
-  username: kzenin
-  password: kzenin
+  username:
+  password:
   host: localhost
   template: template0
 
 <% %w(development test production).each do |env| %>
 <%= env %>:
   <<: *default
-  database: backend_<%= env %>
+  database: ipick_<%= env %>
+
+iwant_users_<%= env %>:
+  <<: *default
+  database: iwant_users_<%= env %>
 <% end %>

@@ -7,7 +7,7 @@ class OrdersController < ApplicationController
   def index
     @orders = Order.all
 
-    render json: @orders, each_serializer: OrderSerializer
+    render json: @orders
   end
 
   # GET /orders/1
