@@ -17,6 +17,8 @@ gem 'seedbank', '~> 0.3.0'
 gem 'ffaker', '~> 2.1'
 gem 'mailgun_rails', '~> 0.8.0'
 
+gem 'state_machine', '~> 1.2'
+
 group :development do
   gem "binding_of_caller", "0.7.1"
   gem "meta_request", "~> 0.3.4"
