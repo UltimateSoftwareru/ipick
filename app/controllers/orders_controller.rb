@@ -1,25 +1,27 @@
 class OrdersController < ApplicationController
-  before_action :authenticate_user!
+  devise_token_auth_group :member, contains: [:user, :courier]
+  before_action :authenticate_member!, only: [:index, :show]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
   before_action :set_order, only: [:show, :update, :destroy]
 
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.all
+    @orders = current_user.orders.in_status(params[:status])
 
-    render json: @orders
+    render json: @orders, include: [:deals, :assigned_deal]
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
-    render json: @order
+    render json: @order, include: [:deals, :assigned_deal]
   end
 
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
+    @order = current_user.orders.new(order_params)
 
     if @order.save
       render json: @order, status: :created, location: @order
@@ -31,9 +33,8 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    @order = Order.find(params[:id])
-
     if @order.update(order_params)
+      handle_status_change if status_order_param
       head :no_content
     else
       render json: @order.errors, status: :unprocessable_entity
@@ -51,10 +52,40 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order = Order.find(params[:id])
+    @order ||= current_member.orders.find(params[:id])
   end
 
   def order_params
-    params[:order]
+    params.require(:data)
+          .require(:attributes)
+          .permit(:name,
+                  :description,
+                  :photo_confirm,
+                  :user_id,
+                  :value,
+                  :price,
+                  :weight,
+                  :delivery_estimate,
+                  :grab_from,
+                  :grab_to,
+                  :deliver_from,
+                  :deliver_to,
+                  :latitude,
+                  :longitude)
+  end
+
+  def status_order_param
+    params.require(:data)
+          .require(:attributes)
+          .permit(:status)[:status]
+  end
+
+  def handle_status_change
+    case status_order_param.to_sym
+    when Order::CLOSED
+      @order.close!
+    when Order::OPENED
+      @order.reopen!
+    end
   end
 end

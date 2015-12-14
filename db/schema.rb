@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209005650) do
+ActiveRecord::Schema.define(version: 20151213195846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 20151209005650) do
   add_index "couriers", ["uid", "provider"], name: "index_couriers_on_uid_and_provider", unique: true, using: :btree
 
   create_table "deals", force: :cascade do |t|
-    t.string   "status"
+    t.string   "status",               default: "interested"
     t.text     "comment"
     t.integer  "order_id"
     t.integer  "courier_id"
@@ -104,6 +104,8 @@ ActiveRecord::Schema.define(version: 20151209005650) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "deals", ["order_id", "courier_id"], name: "uniq_deals", unique: true, using: :btree
 
   create_table "operators", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
@@ -138,7 +140,7 @@ ActiveRecord::Schema.define(version: 20151209005650) do
   add_index "operators", ["uid", "provider"], name: "index_operators_on_uid_and_provider", unique: true, using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.string   "status"
+    t.string   "status",            default: "opened"
     t.string   "name"
     t.text     "description"
     t.boolean  "photo_confirm"
