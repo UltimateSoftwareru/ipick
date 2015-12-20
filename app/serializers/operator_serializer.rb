@@ -1,3 +1,3 @@
 class OperatorSerializer < ActiveModel::Serializer
-  attributes :id, :email, :name
+  attributes :id, :email, :name, :type
 end

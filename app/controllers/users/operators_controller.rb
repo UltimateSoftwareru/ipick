@@ -1,4 +1,4 @@
-class OperatorsController < ResourcesController
+class OperatorsController < UsersController
   before_action :authenticate_operator!
 
   def index
@@ -17,8 +17,6 @@ class OperatorsController < ResourcesController
   end
 
   def resourse_params
-    params.require(:data)
-          .require(:attributes)
-          .permit(:name)
+    params.require(:operator).permit(:name)
   end
 end

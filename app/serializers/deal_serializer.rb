@@ -8,5 +8,5 @@ class DealSerializer < ActiveModel::Serializer
              :updated_at
 
   belongs_to :order
-  belongs_to :courier
+  belongs_to :courier, foreign_key: :user_id
 end

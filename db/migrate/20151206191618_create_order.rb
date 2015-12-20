@@ -1,7 +1,7 @@
 class CreateOrder < ActiveRecord::Migration
   def change
     create_table :orders do |t|
-      t.string :status
+      t.string :status, null: false, default: "opened"
       t.string :name
       t.text :description
       t.boolean :photo_confirm

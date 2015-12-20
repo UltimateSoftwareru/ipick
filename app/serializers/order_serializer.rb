@@ -16,7 +16,7 @@ class OrderSerializer < ActiveModel::Serializer
              :longitude,
              :created_at
 
-  belongs_to :user
+  belongs_to :person, foreign_key: :user_id
   has_many :deals
   has_one :assigned_deal
 end

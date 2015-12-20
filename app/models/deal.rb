@@ -1,6 +1,6 @@
 class Deal < ActiveRecord::Base
   belongs_to :order
-  belongs_to :courier
+  belongs_to :courier, foreign_key: :user_id
   has_many :complains
 
   IN_PROGRESS = :in_progress
@@ -13,7 +13,7 @@ class Deal < ActiveRecord::Base
   delegate :assign!, :deliver!, :reopen!, :close!, to: :order, prefix: true
 
   scope :in_status, ->(status = IN_PROGRESS) { where(status: status) }
-  scope :declined_by, ->(courier_id) { where(courier_id: courier_id, status: DECLINED) }
+  scope :declined_by, ->(courier_id) { where(user_id: courier_id, status: DECLINED) }
 
   after_create :order_assign!, if: :in_progress?
 
