@@ -3,48 +3,34 @@ class Deal < ActiveRecord::Base
   belongs_to :courier
   has_many :complains
 
-  INTERESTED = :interested
   IN_PROGRESS = :in_progress
   DELIVERED = :delivered
   DECLINED = :declined
-  NOT_RELEVANT = :not_relevant
 
   has_attached_file :picture, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
   validates_attachment_content_type :picture, content_type: /\Aimage\/.*\Z/
 
-  delegate :opened?, :assign!, :reopen!, :close!, to: :order, prefix: true
+  delegate :assign!, :deliver!, :reopen!, :close!, to: :order, prefix: true
 
-  scope :in_status, ->(status = [INTERESTED, IN_PROGRESS]) { where(status: status) }
+  scope :in_status, ->(status = IN_PROGRESS) { where(status: status) }
+  scope :declined_by, ->(courier_id) { where(courier_id: courier_id, status: DECLINED) }
 
-  state_machine :status, initial: :interested do
-    state :interested
+  after_create :order_assign!, if: :in_progress?
+
+  state_machine :status, initial: :in_progress do
     state :in_progress
     state :delivered
     state :declined
-    state :not_relevant
 
-    after_transition :interested => :in_progress, do: :order_assign!
     after_transition :in_progress => :declined, do: :order_reopen!
-    after_transition :in_progress => :delivered, do: :order_close!
-
-    event :interesting do
-      transition any => :interested, if: :order_opened?
-    end
-
-    event :accept do
-      transition [:declined, :interested] => :in_progress, if: :order_opened?
-    end
+    after_transition :in_progress => :delivered, do: :order_deliver!
 
     event :decline do
-      transition [:interested, :in_progress] => :declined
+      transition :in_progress => :declined
     end
 
     event :deliver do
       transition :in_progress => :delivered
-    end
-
-    event :lose_relevance do
-      transition [:interested, :in_progress] => :not_relevant
     end
   end
 end

@@ -7,7 +7,12 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_user.orders.in_status(params[:status])
+    status = params[:status]
+    @orders = if current_courier && status.to_sym == Order::OPENED
+                Order.in_status(status.to_sym).open_for(current_courier.id)
+              else
+                current_member.orders.in_status(status.to_sym)
+              end
 
     render json: @orders, include: [:deals, :assigned_deal]
   end
@@ -21,7 +26,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = current_user.orders.new(order_params)
+    @order = current_user.orders.new(order_permitted_params)
 
     if @order.save
       render json: @order, status: :created, location: @order
@@ -33,7 +38,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    if @order.update(order_params)
+    if @order.update(order_permitted_params)
       handle_status_change if status_order_param
       head :no_content
     else
@@ -56,28 +61,29 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:data)
-          .require(:attributes)
-          .permit(:name,
-                  :description,
-                  :photo_confirm,
-                  :user_id,
-                  :value,
-                  :price,
-                  :weight,
-                  :delivery_estimate,
-                  :grab_from,
-                  :grab_to,
-                  :deliver_from,
-                  :deliver_to,
-                  :latitude,
-                  :longitude)
+    #FIXME: waiting for https://github.com/rails-api/active_model_serializers/pull/950 to be merged
+    params.require(:order)
+  end
+
+  def order_permitted_params
+    order_params.permit(:name,
+                        :description,
+                        :photo_confirm,
+                        :user_id,
+                        :value,
+                        :price,
+                        :weight,
+                        :delivery_estimate,
+                        :grab_from,
+                        :grab_to,
+                        :deliver_from,
+                        :deliver_to,
+                        :latitude,
+                        :longitude)
   end
 
   def status_order_param
-    params.require(:data)
-          .require(:attributes)
-          .permit(:status)[:status]
+    order_params.permit(:status)[:status]
   end
 
   def handle_status_change

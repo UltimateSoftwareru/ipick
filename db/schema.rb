@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151213195846) do
+ActiveRecord::Schema.define(version: 20151220160545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 20151213195846) do
   add_index "couriers", ["uid", "provider"], name: "index_couriers_on_uid_and_provider", unique: true, using: :btree
 
   create_table "deals", force: :cascade do |t|
-    t.string   "status",               default: "interested"
+    t.string   "status",               default: "in_progress"
     t.text     "comment"
     t.integer  "order_id"
     t.integer  "courier_id"
