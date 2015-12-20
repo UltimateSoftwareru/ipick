@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :orders, only: [:index, :show, :create, :update, :destroy]
-  resources :deals, only: [:index, :show, :update]
+  resources :deals, only: [:index, :show, :update, :create]
 
   resources :operators, :users, :couriers, only: [] do
     collection do
