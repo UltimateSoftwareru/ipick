@@ -1,5 +1,5 @@
-class CouriersController < ResourcesController
-  devise_token_auth_group :member, contains: [:user, :courier]
+class CouriersController < UsersController
+  devise_token_auth_group :member, contains: [:person, :courier]
   before_action :authenticate_member!, only: [:index, :show]
   before_action :authenticate_courier!, only: [:me, :update]
 
@@ -19,8 +19,6 @@ class CouriersController < ResourcesController
   end
 
   def resourse_params
-    params.require(:data)
-          .require(:attributes)
-          .permit(:name)
+    params.require(:courier).permit(:name)
   end
 end

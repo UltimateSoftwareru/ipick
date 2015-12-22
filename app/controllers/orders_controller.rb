@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
-  devise_token_auth_group :member, contains: [:user, :courier]
+  devise_token_auth_group :member, contains: [:person, :courier]
   before_action :authenticate_member!, only: [:index, :show]
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :authenticate_person!, only: [:create, :update, :destroy]
   before_action :set_order, only: [:show, :update, :destroy]
 
   # GET /orders
@@ -26,7 +26,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = current_user.orders.new(order_permitted_params)
+    @order = current_person.orders.new(order_permitted_params)
 
     if @order.save
       render json: @order, status: :created, location: @order
@@ -91,6 +91,7 @@ class OrdersController < ApplicationController
     when Order::CLOSED
       @order.close!
     when Order::OPENED
+      return if @order.opened?
       @order.reopen!
     end
   end
