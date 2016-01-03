@@ -2,7 +2,7 @@ class DealsController < ApplicationController
   devise_token_auth_group :member, contains: [:person, :courier]
   before_action :authenticate_member!, only: [:index, :show]
   before_action :authenticate_courier!, only: [:create, :update]
-  before_action :set_deal, only: [:show, :update, :destroy]
+  before_action :set_deal, only: [:show, :update]
 
   # GET /deals
   # GET /deals.json

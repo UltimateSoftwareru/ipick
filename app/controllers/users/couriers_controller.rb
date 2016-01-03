@@ -5,7 +5,7 @@ class CouriersController < UsersController
 
   def index
     @couriers = Courier.all
-    render json: @couriers
+    render json: @couriers, include: "**"
   end
 
   private

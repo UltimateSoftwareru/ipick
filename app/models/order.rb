@@ -1,6 +1,7 @@
 class Order < ActiveRecord::Base
   belongs_to :person, foreign_key: :user_id
   has_and_belongs_to_many :addresses
+  belongs_to :from_address, class_name: :Address
   has_and_belongs_to_many :transports
   has_many :deals, dependent: :destroy
   has_one :assigned_deal, -> { where(status: [Deal::IN_PROGRESS, Deal::DELIVERED]) }, class_name: :Deal

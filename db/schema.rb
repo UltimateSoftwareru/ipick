@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151220201621) do
+ActiveRecord::Schema.define(version: 20160103004054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20151220201621) do
     t.integer "user_id"
     t.float   "latitude"
     t.float   "longitude"
+    t.string  "address"
   end
 
   create_table "addresses_orders", id: false, force: :cascade do |t|
@@ -78,6 +79,7 @@ ActiveRecord::Schema.define(version: 20151220201621) do
     t.integer  "value"
     t.integer  "price"
     t.integer  "weight"
+    t.integer  "from_address_id"
     t.date     "delivery_estimate"
     t.datetime "grab_from"
     t.datetime "grab_to"

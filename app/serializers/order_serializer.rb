@@ -19,4 +19,6 @@ class OrderSerializer < ActiveModel::Serializer
   belongs_to :person, foreign_key: :user_id
   has_many :deals
   has_one :assigned_deal
+  has_many :addresses
+  belongs_to :from_address
 end
