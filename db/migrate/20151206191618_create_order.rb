@@ -9,6 +9,7 @@ class CreateOrder < ActiveRecord::Migration
       t.integer :value
       t.integer :price
       t.integer :weight
+      t.integer :from_address_id
       t.date :delivery_estimate
       t.datetime :grab_from
       t.datetime :grab_to

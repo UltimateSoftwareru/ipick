@@ -3,7 +3,7 @@ class OperatorsController < UsersController
 
   def index
     @operators = Operator.all
-    render json: @operators
+    render json: @operators, include: "**"
   end
 
   private

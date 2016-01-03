@@ -10,21 +10,23 @@ class AdditionalFieldsToUser < ActiveRecord::Migration
   def change
     @connection = User.connection
     change_table :users do |t|
-      ## STI
-      t.string :type, null: false, default: "Person"
+      unless column_exists? :users, :type
+        ## STI
+        t.string :type, null: false, default: "Person"
 
-      ## User Info
-      t.string :name
-      t.string :nickname
-      t.string :phone
+        ## User Info
+        t.string :name
+        t.string :nickname
+        t.string :phone
 
-      ## Courier info
-      t.integer :status
-      t.integer :transport_id
+        ## Courier info
+        t.integer :status
+        t.integer :transport_id
 
-      ## Geocoder
-      t.float :latitude
-      t.float :longitude
+        ## Geocoder
+        t.float :latitude
+        t.float :longitude
+      end
     end
   end
 end

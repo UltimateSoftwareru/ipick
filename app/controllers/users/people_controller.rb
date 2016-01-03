@@ -3,7 +3,8 @@ class PeopleController < UsersController
 
   def index
     @persons = Person.all
-    render json: @persons
+
+    render json: @persons, include: "**"
   end
 
   private
