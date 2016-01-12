@@ -5,13 +5,13 @@ class UsersController < ApplicationController
   # GET /{{resourses}}/me
   # GET /{{resourses}}/me.json
   def me
-    render json: @resourse, include: "**"
+    render json: @resourse, include: "orders,deals,addresses,transports"
   end
 
   # GET /{{resourses}}/1
   # GET /{{resourses}}/1.json
   def show
-    render json: @resourse, include: "**"
+    render json: @resourse, include: "orders,deals,addresses,transports"
   end
 
   # PATCH/PUT /{{resourses}}

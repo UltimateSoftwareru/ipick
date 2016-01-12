@@ -12,8 +12,5 @@
 #
 
 class AddressSerializer < ActiveModel::Serializer
-  attributes :id, :latitude, :longitude, :address
-
-  belongs_to :person
-  has_many :orders
+  attributes :id, :latitude, :longitude, :address, :name, :phone
 end

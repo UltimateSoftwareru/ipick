@@ -1,7 +1,7 @@
 GIT
-  remote: git://github.com/beauby/active_model_serializers.git
-  revision: 57f1c0256e664e63af5fc8ef4d04ba7d84d52570
-  branch: jsonapi-parse
+  remote: git://github.com/rails-api/active_model_serializers.git
+  revision: adaf5b87df97c1621e68a0a894a8d0fcdf227de5
+  branch: master
   specs:
     active_model_serializers (0.10.0.rc3)
       actionpack (>= 4.0)
