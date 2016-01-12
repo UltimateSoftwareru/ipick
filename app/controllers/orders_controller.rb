@@ -26,7 +26,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = current_person.orders.new(order_permitted_params)
+    @order = current_person.orders.new(order_params)
 
     if @order.save
       render json: @order, status: :created, location: @order
@@ -38,7 +38,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    if @order.update(order_permitted_params)
+    if @order.update(order_params)
       handle_status_change if status_order_param
       head :no_content
     else
@@ -61,29 +61,17 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    #FIXME: waiting for https://github.com/rails-api/active_model_serializers/pull/950 to be merged
-    params.require(:order)
+    jsonapi_params.except(:status)
   end
 
-  def order_permitted_params
-    order_params.permit(:name,
-                        :description,
-                        :photo_confirm,
-                        :user_id,
-                        :value,
-                        :price,
-                        :weight,
-                        :delivery_estimate,
-                        :grab_from,
-                        :grab_to,
-                        :deliver_from,
-                        :deliver_to,
-                        :latitude,
-                        :longitude)
+  def permitted_params
+    %i(name status description photo_confirm
+       value price weight delivery_estimate
+       grab_from grab_to deliver_from deliver_to)
   end
 
   def status_order_param
-    order_params.permit(:status)[:status]
+    jsonapi_params[:status]
   end
 
   def handle_status_change

@@ -16,7 +16,7 @@ class OperatorsController < UsersController
     @resourse ||= current_operator
   end
 
-  def resourse_params
-    params.require(:operator).permit(:name)
+  def permitted_params
+    %i(email picture name nickname phone)
   end
 end

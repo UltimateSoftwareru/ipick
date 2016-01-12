@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /{{resourses}}
   # PATCH/PUT /{{resourses}}.json
   def update
-    if @resourse.update(resourse_params)
+    if @resourse.update(jsonapi_params)
       head :no_content
     else
       render json: @resourse.errors, status: :unprocessable_entity

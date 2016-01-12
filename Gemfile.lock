@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/beauby/active_model_serializers.git
+  revision: 57f1c0256e664e63af5fc8ef4d04ba7d84d52570
+  branch: jsonapi-parse
+  specs:
+    active_model_serializers (0.10.0.rc3)
+      actionpack (>= 4.0)
+      activemodel (>= 4.0)
+      railties (>= 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -20,10 +30,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.1)
-    active_model_serializers (0.10.0.rc3)
-      actionpack (>= 4.0)
-      activemodel (>= 4.0)
-      railties (>= 4.0)
     activejob (4.2.0)
       activesupport (= 4.2.0)
       globalid (>= 0.3.0)
@@ -262,7 +268,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers (~> 0.10.0.rc3)
+  active_model_serializers!
   annotate (~> 2.6.8)
   annotate_models (~> 0.0.4)
   bcrypt (~> 3.1.7)
@@ -298,4 +304,4 @@ DEPENDENCIES
   traceroute (~> 0.4.0)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

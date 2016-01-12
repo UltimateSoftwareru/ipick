@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: addresses
+#
+#  id        :integer          not null, primary key
+#  name      :string
+#  phone     :string
+#  user_id   :integer
+#  latitude  :float
+#  longitude :float
+#  address   :string
+#
+
 class Address < ActiveRecord::Base
   belongs_to :person, foreign_key: :user_id
   has_and_belongs_to_many :orders

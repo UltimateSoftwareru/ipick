@@ -21,7 +21,7 @@ class DealsController < ApplicationController
   # POST /deals
   # POST /deals.json
   def create
-    @deal = current_courier.deals.new(deal_permitted_create_params)
+    @deal = current_courier.deals.new(jsonapi_params)
 
     if @deal.save
       render json: @deal, status: :created, location: @deal
@@ -33,7 +33,7 @@ class DealsController < ApplicationController
   # PATCH/PUT /deals/1
   # PATCH/PUT /deals/1.json
   def update
-    if @deal.update(deal_permitted_params)
+    if @deal.update(deal_update_params)
       handle_status_change if status_deal_param
       head :no_content
     else
@@ -47,21 +47,16 @@ class DealsController < ApplicationController
     @deal ||= current_member.deals.find(params[:id])
   end
 
-  def deal_params
-    #FIXME: waiting for https://github.com/rails-api/active_model_serializers/pull/950 to be merged
-    params.require(:deal)
+  def deal_update_params
+    jsonapi_params.except(:status)
   end
 
-  def deal_permitted_params
-    deal_params.permit(:comment)
-  end
-
-  def deal_permitted_create_params
-    deal_params.permit(:comment, :status, :order_id)
+  def permitted_params
+    %i(comment status order)
   end
 
   def status_deal_param
-    deal_params.permit(:status)[:status]
+    jsonapi_params[:status]
   end
 
   def handle_status_change
