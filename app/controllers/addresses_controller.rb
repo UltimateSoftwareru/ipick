@@ -21,7 +21,7 @@ class AddressesController < ApplicationController
   # POST /addresses
   # POST /addresses.json
   def create
-    @address = current_person.addresses.new(address_permitted_params)
+    @address = current_person.addresses.new(jsonapi_params)
 
     if @address.save
       render json: @address, status: :created, location: @address
@@ -33,8 +33,8 @@ class AddressesController < ApplicationController
   # PATCH/PUT /addresses/1
   # PATCH/PUT /addresses/1.json
   def update
-    if @address.update(address_permitted_params)
-      head :no_content
+    if @address.update(jsonapi_params)
+      render json: @address, status: :ok, location: @address
     else
       render json: @address.errors, status: :unprocessable_entity
     end
@@ -54,8 +54,7 @@ class AddressesController < ApplicationController
     @address ||= Address.find(params[:id])
   end
 
-  def address_permitted_params
-    #FIXME: waiting for https://github.com/rails-api/active_model_serializers/pull/950 to be merged
-    params.require(:address).permit(:latitude, :longitude, :address)
+  def permitted_params
+    %i(latitude longitude address name phone address user)
   end
 end

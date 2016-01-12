@@ -18,7 +18,7 @@ class CouriersController < UsersController
     @resourse ||= current_courier
   end
 
-  def resourse_params
-    params.require(:courier).permit(:name)
+  def permitted_params
+    %i(email picture name nickname phone status transport latitude longitude)
   end
 end

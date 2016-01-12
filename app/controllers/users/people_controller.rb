@@ -17,7 +17,7 @@ class PeopleController < UsersController
     @resourse ||= current_person
   end
 
-  def resourse_params
-    params.require(:person).permit(:name)
+  def permitted_params
+    %i(email picture name nickname phone)
   end
 end
