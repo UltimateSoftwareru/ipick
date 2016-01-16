@@ -2,7 +2,7 @@ class BaseSaver
   include Concord.new(:params, :parent, :relation)
 
   def parse
-    return unless parent
+    return if !parent || !options
     if options.is_a? Array
       parent.transaction do
         parent.public_send(relation).delete_all

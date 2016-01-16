@@ -1,10 +1,8 @@
 class AddressSaver < BaseSaver
-  include Concord.new(:params, :parent, :relation)
-
   private
 
   def options
-    params.require(:data).require(relation)
+    params.require(:data)[:relation]
   end
 
   def permitted
