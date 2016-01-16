@@ -14,13 +14,13 @@ class OrdersController < ApplicationController
                 current_member.orders.in_status(status.to_sym)
               end
 
-    render json: @orders, include: [:deals, :assigned_deal]
+    render json: @orders, include: [:deals, :assigned_deal, :addresses, :from_address]
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
-    render json: @order, include: [:deals, :assigned_deal]
+    render json: @order, include: [:deals, :assigned_deal, :addresses, :from_address]
   end
 
   # POST /orders
@@ -29,6 +29,7 @@ class OrdersController < ApplicationController
     @order = current_person.orders.new(order_params)
 
     if @order.save
+      save_addresses
       render json: @order, status: :created, location: @order
     else
       render json: @order.errors, status: :unprocessable_entity
@@ -39,6 +40,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     if @order.update(order_params)
+      save_addresses
       handle_status_change if status_order_param
       head :no_content
     else
@@ -61,13 +63,20 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    jsonapi_params.except(:status)
+    jsonapi_params.except(:status, :transport_id)
   end
 
   def permitted_params
     %i(name status description photo_confirm
        value price weight delivery_estimate
-       grab_from grab_to deliver_from deliver_to)
+       grab_from grab_to deliver_from deliver_to
+       transports)
+  end
+
+  def save_addresses
+    %i(from_address addresses).each do |relation|
+      AddressSaver.new(params, @order, relation).parse
+    end
   end
 
   def status_order_param

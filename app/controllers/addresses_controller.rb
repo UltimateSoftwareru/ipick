@@ -1,13 +1,13 @@
 class AddressesController < ApplicationController
   devise_token_auth_group :member, contains: [:person, :courier]
-  before_action :authenticate_member!, only: [:index, :show]
-  before_action :authenticate_person!, only: [:create, :update, :destroy]
-  before_action :load_address, only: [:show, :update, :destroy]
+  before_action :authenticate_member!, only: [:show]
+  before_action :authenticate_person!, only: [:index, :create, :update, :destroy]
+  before_action :load_address, only: [:update, :destroy]
 
   # GET /addresses
   # GET /addresses.json
   def index
-    @addresses = Address.all
+    @addresses = current_person.addresses
 
     render json: @addresses
   end
@@ -15,7 +15,7 @@ class AddressesController < ApplicationController
   # GET /addresses/1
   # GET /addresses/1.json
   def show
-    render json: @address
+    render json: Address.find(params[:id])
   end
 
   # POST /addresses
@@ -51,10 +51,10 @@ class AddressesController < ApplicationController
   private
 
   def load_address
-    @address ||= Address.find(params[:id])
+    @address ||= current_person.addresses.find(params[:id])
   end
 
   def permitted_params
-    %i(latitude longitude address name phone address user)
+    %i(latitude longitude address name phone address)
   end
 end
