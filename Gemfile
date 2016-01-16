@@ -37,6 +37,18 @@ group :production do
   gem "rails_12factor", "0.0.2"
 end
 
+group :test do
+  gem 'rspec-its', '~> 1.2'
+  gem "rspec-rails", "3.3.2"
+  gem "factory_girl_rails", "4.4.0"
+  gem "spork", "~> 1.0rc"
+  gem "simplecov", "0.9.2", require: false
+  gem "database_cleaner", "1.3.0"
+  gem "shoulda-matchers", "2.8.0"
+  gem "fivemat", "~> 1.3.1"
+  gem 'test_after_commit', '~> 0.4.1'
+end
+
 group :development, :test do
   gem "pry", "0.9.12.6"
   gem "pry-rails", "0.3.2"

@@ -22,6 +22,14 @@ class BaseSaver
 
   private
 
+  def options
+    raise "Define in subclass"
+  end
+
+  def permitted
+    raise "Define in subclass"
+  end
+
   def deserialize(options)
     ActiveModelSerializers::Deserialization.jsonapi_parse(options, only: permitted)
   end
