@@ -36,20 +36,20 @@ class Deal < ActiveRecord::Base
 
   after_create :order_assign!, if: :in_progress?
 
-  state_machine :status, initial: :in_progress do
-    state :in_progress
-    state :delivered
-    state :declined
+  state_machine :status, initial: IN_PROGRESS do
+    state IN_PROGRESS
+    state DELIVERED
+    state DECLINED
 
-    after_transition :in_progress => :declined, do: :order_reopen!
-    after_transition :in_progress => :delivered, do: :order_deliver!
+    after_transition IN_PROGRESS => DECLINED, do: :order_reopen!
+    after_transition IN_PROGRESS => DELIVERED, do: :order_deliver!
 
     event :decline do
-      transition :in_progress => :declined
+      transition IN_PROGRESS => DECLINED
     end
 
     event :deliver do
-      transition :in_progress => :delivered
+      transition IN_PROGRESS => DELIVERED
     end
   end
 end

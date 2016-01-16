@@ -31,6 +31,7 @@ class Order < ActiveRecord::Base
 
   OPENED = :opened
   ASSIGNED = :assigned
+  DELIVERED = :delivered
   CLOSED = :closed
 
   delegate :courier, :delivered?, to: :assigned_deal, prefix: false
@@ -39,26 +40,26 @@ class Order < ActiveRecord::Base
   #FIXME: use -1 hack due to bug with NOT IN [] operand
   scope :open_for, ->(courier_id) { where("id NOT IN (?)", [-1, *Deal.declined_by(courier_id).pluck(:order_id)]) }
 
-  state_machine :status, initial: :opened do
-    state :opened
-    state :assigned
-    state :delivered
-    state :closed
+  state_machine :status, initial: OPENED do
+    state OPENED
+    state ASSIGNED
+    state DELIVERED
+    state CLOSED
 
     event :assign do
-      transition :opened => :assigned
+      transition OPENED => ASSIGNED
     end
 
     event :deliver do
-      transition :assigned => :delivered
+      transition ASSIGNED => DELIVERED
     end
 
     event :reopen do
-      transition :closed => :opened
+      transition CLOSED => OPENED
     end
 
     event :close do
-      transition :opened => :closed
+      transition OPENED => CLOSED
     end
   end
 

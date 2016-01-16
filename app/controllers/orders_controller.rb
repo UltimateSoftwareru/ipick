@@ -14,13 +14,13 @@ class OrdersController < ApplicationController
                 current_member.orders.in_status(status.to_sym)
               end
 
-    render json: @orders, include: [:deals, :assigned_deal, :addresses, :from_address]
+    render json: @orders, include: [:person, :deals, :assigned_deal, :addresses, :from_address]
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
-    render json: @order, include: [:deals, :assigned_deal, :addresses, :from_address]
+    render json: @order, include: [:person, :deals, :assigned_deal, :addresses, :from_address]
   end
 
   # POST /orders
