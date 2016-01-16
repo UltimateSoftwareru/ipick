@@ -16,23 +16,11 @@
 #  updated_at :datetime
 #
 
-class Complain < ActiveRecord::Base
+class ComplainSerializer < ActiveModel::Serializer
+  attributes :id, :subject, :resolution, :status
+
   belongs_to :operator, foreign_key: :user_id
-  belongs_to :deal
   belongs_to :from, polymorphic: true
   belongs_to :to, polymorphic: true
-
-  OPENED = :opened
-  RESOLVED = :resolved
-
-  scope :in_status, ->(status = [OPENED]) { where(status: status) }
-
-  state_machine :status, initial: OPENED do
-    state OPENED
-    state RESOLVED
-
-    event :resolve do
-      transition OPENED => RESOLVED
-    end
-  end
+  belongs_to :deal
 end
