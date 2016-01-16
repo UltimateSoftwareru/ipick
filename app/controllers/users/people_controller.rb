@@ -4,15 +4,15 @@ class PeopleController < UsersController
   before_action :authenticate_person!, only: [:me, :update]
 
   def index
-    @persons = Person.all
+    @persons = Person.all.includes(includes)
 
-    render json: @persons, include: "**"
+    render json: @persons, include: includes
   end
 
   private
 
   def set_resource
-    @resourse ||= Person.find(params[:id])
+    @resourse ||= Person.find_by(id: params[:id]).includes(includes)
   end
 
   def set_current_resource
@@ -21,5 +21,9 @@ class PeopleController < UsersController
 
   def permitted_params
     %i(email picture name nickname phone)
+  end
+
+  def includes
+    %i(addresses)
   end
 end

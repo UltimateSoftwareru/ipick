@@ -5,13 +5,13 @@ class UsersController < ApplicationController
   # GET /{{resourses}}/me
   # GET /{{resourses}}/me.json
   def me
-    render json: @resourse, include: "orders,deals,addresses,transports"
+    render json: @resourse, include: includes
   end
 
   # GET /{{resourses}}/1
   # GET /{{resourses}}/1.json
   def show
-    render json: @resourse, include: "orders,deals,addresses,transports"
+    render json: @resourse, include: includes
   end
 
   # PATCH/PUT /{{resourses}}
@@ -22,5 +22,11 @@ class UsersController < ApplicationController
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end
+  end
+
+  private
+
+  def includes
+    %i()
   end
 end
