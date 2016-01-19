@@ -3,6 +3,7 @@ class CouriersController < UsersController
   before_action :authenticate_member!, only: [:index, :show]
   before_action :authenticate_courier!, only: [:me, :update]
 
+  api :GET, 'couriers'
   def index
     @couriers = Courier.all
     render json: @couriers, include: "**"

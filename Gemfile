@@ -58,4 +58,5 @@ group :development, :test do
   gem "annotate", "~> 2.6.8"
   gem "annotate_models", "~> 0.0.4"
   gem "rubocop", "~> 0.27.0", require: false
+  gem 'apipie-rails', '~> 0.3.5'
 end

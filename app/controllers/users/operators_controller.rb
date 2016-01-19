@@ -1,6 +1,7 @@
 class OperatorsController < UsersController
   before_action :authenticate_operator!
 
+  api :GET, 'operators'
   def index
     @operators = Operator.all
     render json: @operators, include: "**"

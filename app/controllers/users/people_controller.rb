@@ -3,6 +3,7 @@ class PeopleController < UsersController
   before_action :authenticate_member!, only: [:index, :show]
   before_action :authenticate_person!, only: [:me, :update]
 
+  api :GET, 'people'
   def index
     @persons = Person.all.includes(includes)
 

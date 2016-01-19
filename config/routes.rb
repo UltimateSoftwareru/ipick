@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  apipie
   resources :orders, only: [:index, :show, :create, :update, :destroy]
   resources :complains, only: [:index, :show, :create, :update, :destroy]
   resources :deals, only: [:index, :show, :update, :create]
