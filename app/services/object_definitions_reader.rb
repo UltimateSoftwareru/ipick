@@ -3,7 +3,7 @@ require 'singleton'
 class ObjectDefinitionsReader
   include Singleton
 
-  def self.process
+  def self.read
     path = "#{Rails.root}/config/object_definitions.yml"
     if path and File.exist?(path.to_s)
       result = YAML::load(File.open(path.to_s)).deep_symbolize_keys

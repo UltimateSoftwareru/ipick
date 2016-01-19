@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
 
+  resource_description do
+    formats ["json", "jsonp"]
+  end
+
   private
 
   def permitted_polymorphic
@@ -26,6 +30,6 @@ class ApplicationController < ActionController::API
   end
 
   def self.object_definitions
-    @@definitions ||= ObjectDefinitionsReader.process
+    @@definitions ||= ObjectDefinitionsReader.read
   end
 end

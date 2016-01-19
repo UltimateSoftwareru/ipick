@@ -6,7 +6,6 @@ class AddressesController < ApplicationController
 
   resource_description do
     desc "Addresses represents a records with geopositional points on the map provided by latitude and longitude"
-    formats ['json']
     param "Access-Token: ", String, desc: "Access-Token header is expected on all calls", required: true
     param "Client: ", String, desc: "Client header is expected on all calls", required: true
     param "Uid: ", String, desc: "Uid header is expected on all calls", required: true
@@ -25,7 +24,7 @@ class AddressesController < ApplicationController
     end
   end
 
-  api :GET, 'addresses'
+  api :GET, "addresses", "all persons addresses"
   desc "Path to render all persons addresses, authorized for person only"
   example self.multiple_example
   def index
@@ -34,7 +33,7 @@ class AddressesController < ApplicationController
     render json: @addresses
   end
 
-  api :GET, 'addresses/:id'
+  api :GET, "addresses/:id", "single address"
   desc "Path to render single address, authorized for person and courier"
   error 404, "Record missing"
   param :id, Fixnum, required: true, desc: "Address ID"
@@ -43,7 +42,7 @@ class AddressesController < ApplicationController
     render json: Address.find(params[:id])
   end
 
-  api :POST, 'addresses'
+  api :POST, "addresses", "create address"
   desc "Path to create address, authorized for person only"
   error 422, "Unprocessable entity - {\"latitude\":[\"can't be blank\"]}"
   param_group :address
@@ -58,7 +57,7 @@ class AddressesController < ApplicationController
     end
   end
 
-  api :PATCH, 'addresses/:id'
+  api :PATCH, "addresses/:id", "update address"
   desc "Path to update address, authorized for person only"
   error 404, "Record missing"
   error 422, "Unprocessable entity - {\"latitude\":[\"can't be blank\"]}"
@@ -73,7 +72,7 @@ class AddressesController < ApplicationController
     end
   end
 
-  api :DELETE, 'addresses/:id'
+  api :DELETE, "addresses/:id", "delete address"
   desc "Path to delete address, authorized for person only"
   error 404, "Record missing"
   param :id, Fixnum, desc: "Address ID", required: true
