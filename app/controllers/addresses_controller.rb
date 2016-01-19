@@ -5,7 +5,7 @@ class AddressesController < ApplicationController
   before_action :load_address, only: [:update, :destroy]
 
   resource_description do
-    desc "Addresses are addresses"
+    desc "Addresses represents a records with geopositional points on the map provided by latitude and longitude"
     formats ['json']
     param "Access-Token: ", String, desc: "Access-Token header is expected on all calls", required: true
     param "Client: ", String, desc: "Client header is expected on all calls", required: true
@@ -27,6 +27,7 @@ class AddressesController < ApplicationController
 
   api :GET, 'addresses'
   desc "Path to render all persons addresses, authorized for person only"
+  example self.multiple_example
   def index
     @addresses = current_person.addresses
 
@@ -37,14 +38,16 @@ class AddressesController < ApplicationController
   desc "Path to render single address, authorized for person and courier"
   error 404, "Record missing"
   param :id, Fixnum, required: true, desc: "Address ID"
+  example self.single_example
   def show
     render json: Address.find(params[:id])
   end
 
   api :POST, 'addresses'
   desc "Path to create address, authorized for person only"
-  error 422, "Unprocessable entity"
+  error 422, "Unprocessable entity - {\"latitude\":[\"can't be blank\"]}"
   param_group :address
+  example self.single_example
   def create
     @address = current_person.addresses.new(jsonapi_params)
 
@@ -58,9 +61,10 @@ class AddressesController < ApplicationController
   api :PATCH, 'addresses/:id'
   desc "Path to update address, authorized for person only"
   error 404, "Record missing"
-  error 422, "Unprocessable entity"
+  error 422, "Unprocessable entity - {\"latitude\":[\"can't be blank\"]}"
   param :id, Fixnum, desc: "Address ID", required: true
   param_group :address
+  example self.single_example
   def update
     if @address.update(jsonapi_params)
       render json: @address, status: :ok, location: @address
@@ -73,6 +77,7 @@ class AddressesController < ApplicationController
   desc "Path to delete address, authorized for person only"
   error 404, "Record missing"
   param :id, Fixnum, desc: "Address ID", required: true
+  example "204 No Content"
   def destroy
     @address.destroy
 

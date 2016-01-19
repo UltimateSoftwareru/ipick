@@ -1,0 +1,15 @@
+addresses:
+  single: &single_address
+    data:
+      id: 124
+      type: "addresses"
+      attributes:
+        latitude: 55.947064
+        longitude: 37.4992755000001
+        address: "Спортивная ул., 1, Долгопрудный, Московская обл., Россия, 141707"
+        name: "12312"
+        phone: "2223"
+  multiple:
+    data:
+      -
+        <<: *single_address
