@@ -33,7 +33,7 @@
 #  name                   :string
 #  nickname               :string
 #  phone                  :string
-#  status                 :integer
+#  status                 :string           default("inactive"), not null
 #  transport_id           :integer
 #  latitude               :float
 #  longitude              :float

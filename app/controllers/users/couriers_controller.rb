@@ -19,7 +19,7 @@ class CouriersController < UsersController
         param :email, String, desc: "Courier email"
         param :picture, String, desc: "Courier picture"
         param :phone, String, desc: "Courier phone"
-        param :status, String, desc: "Courier status"
+        param :status, Courier::STATUSES, desc: "Courier status"
         param :latitude, String, desc: "Courier current latitude"
         param :longitude, String, desc: "Courier current longitude"
       end
@@ -63,7 +63,8 @@ class CouriersController < UsersController
   param_group :courier
   example self.single_example
   def update
-    if @resourse.update(jsonapi_params)
+    if @resourse.update(courier_update_params)
+      handle_status_change if status_courier_param
       head :no_content
     else
       render json: @resourse.errors, status: :unprocessable_entity
@@ -80,7 +81,28 @@ class CouriersController < UsersController
     @resourse ||= current_courier
   end
 
+  def courier_update_params
+    jsonapi_params.except(:status)
+  end
+
   def permitted_params
     %i(email picture name nickname phone status transport latitude longitude)
+  end
+
+  def status_courier_param
+    jsonapi_params[:status]
+  end
+
+  def handle_status_change
+    case status_courier_param.to_sym
+    when Courier::ACTIVE
+      @courier.reactive!
+    when Courier::INACTIVE
+      @courier.disactive!
+    end
+  end
+
+  def includes
+    %i(deals transport activities current_activity orders)
   end
 end

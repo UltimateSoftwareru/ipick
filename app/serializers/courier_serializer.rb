@@ -33,7 +33,7 @@
 #  name                   :string
 #  nickname               :string
 #  phone                  :string
-#  status                 :integer
+#  status                 :string           default("inactive"), not null
 #  transport_id           :integer
 #  latitude               :float
 #  longitude              :float
@@ -41,4 +41,6 @@
 
 class CourierSerializer < ActiveModel::Serializer
   attributes :id, :email, :name, :type
+
+  has_many :activities, foreign_key: :user_id
 end

@@ -5,7 +5,7 @@
 #  id         :integer          not null, primary key
 #  subject    :string
 #  resolution :string
-#  status     :string
+#  status     :string           default("opened"), not null
 #  from_type  :string
 #  to_type    :string
 #  to_id      :integer

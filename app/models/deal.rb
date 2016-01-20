@@ -53,4 +53,8 @@ class Deal < ActiveRecord::Base
       transition IN_PROGRESS => DELIVERED
     end
   end
+
+  def delivered_now!
+    self.update(delivered_at: Time.current)
+  end
 end
