@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
   CLOSED = :closed
   STATUSES = [OPENED, ASSIGNED, DELIVERED, CLOSED]
 
-  delegate :courier, :delivered?, to: :assigned_deal, prefix: false
+  delegate :courier, :delivered_now!, :delivered_at, to: :assigned_deal, prefix: false, allow_nil: true
 
   scope :in_status, ->(status = [OPENED, ASSIGNED]) { where(status: status) }
   #FIXME: use -1 hack due to bug with NOT IN [] operand
@@ -47,6 +47,8 @@ class Order < ActiveRecord::Base
     state ASSIGNED
     state DELIVERED
     state CLOSED
+
+    after_transition ASSIGNED => DELIVERED, do: :deal_delivered_now!
 
     event :assign do
       transition OPENED => ASSIGNED

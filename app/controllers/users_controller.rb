@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   error 401, "Unauthorized - \"errors\": [\"Invalid login credentials. Please try again.\"]"
   example self.single_example +
     "\nHeaders (Access Token, Client, Uid) which should be included in all next authorized request"
-  def sign_in
+  def auth_sign_in
     raise "Do not use, just a stub for apidoc"
   end
 
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     Call sends email message with link like below
     BACKEND_HOST/auth/password/edit?config=default&redirect_url=FRONTEND_HOST/password&reset_password_token=reset_password_token
   DESC
-  def password
+  def auth_password
     raise "Do not use, just a stub for apidoc"
   end
 
@@ -43,7 +43,11 @@ class UsersController < ApplicationController
     Call sends email message with link like below
     BACKEND_HOST/auth/confirmation?config=default&confirmation_token=confirmation_token&redirect_url=FRONTEND_HOST
   DESC
-  def sign_up
+  def auth_sign_up
     raise "Do not use, just a stub for apidoc"
+  end
+
+  def includes
+    %i()
   end
 end

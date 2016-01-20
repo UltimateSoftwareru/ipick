@@ -33,7 +33,7 @@
 #  name                   :string
 #  nickname               :string
 #  phone                  :string
-#  status                 :integer
+#  status                 :string           default("inactive"), not null
 #  transport_id           :integer
 #  latitude               :float
 #  longitude              :float
@@ -41,6 +41,7 @@
 
 class Courier < User
   has_many :activities, foreign_key: :user_id
+  has_one :current_activity, -> { where(finish: nil) }, foreign_key: :user_id, class_name: :Activity
   belongs_to :transport
   has_many :deals, foreign_key: :user_id
   belongs_to :complainable, polymorphic: true
@@ -51,5 +52,27 @@ class Courier < User
 
   def complains
     Complain.where(from_id: self.id, from_type: self.class.name)
+  end
+
+  delegate :finish!, to: :current_activity, prefix: true, allow_nil: true
+
+  ACTIVE = :active
+  INACTIVE = :inactive
+  STATUSES = [ACTIVE, INACTIVE]
+
+  state_machine :status, initial: INACTIVE do
+    state ACTIVE
+    state INACTIVE
+
+    after_transition ACTIVE => INACTIVE, do: :create_current_activity
+    after_transition INACTIVE => ACTIVE, do: :current_activity_finish!
+
+    event :reactive do
+      transition INACTIVE => ACTIVE
+    end
+
+    event :disactive do
+      transition ACTIVE => INACTIVE
+    end
   end
 end

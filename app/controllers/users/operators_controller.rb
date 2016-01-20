@@ -72,4 +72,8 @@ class OperatorsController < UsersController
   def permitted_params
     %i(email picture name nickname phone)
   end
+
+  def includes
+    %i(complains)
+  end
 end

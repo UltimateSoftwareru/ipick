@@ -3,7 +3,7 @@ class TransportsController < ApplicationController
   before_action :authenticate_member!, only: [:index, :show]
 
   resource_description do
-    desc "Transport represents a records of issues of persons to couriers or couriers to person"
+    desc "Transport represents a records of available transports"
     param "Access-Token: ", String, desc: "Access-Token header is expected on all calls", required: true
     param "Client: ", String, desc: "Client header is expected on all calls", required: true
     param "Uid: ", String, desc: "Uid header is expected on all calls", required: true
@@ -21,7 +21,7 @@ class TransportsController < ApplicationController
   end
 
   api :GET, "transports/:id", "single transport"
-  desc "Path to render single complain, authorized for persons, couriers and operators"
+  desc "Path to render single transport, authorized for persons, couriers and operators"
   error 404, "Record missing"
   param :id, Fixnum, required: true, desc: "Complain ID"
   example self.single_example
