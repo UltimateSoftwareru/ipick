@@ -4,22 +4,49 @@ class AddressesController < ApplicationController
   before_action :authenticate_person!, only: [:index, :create, :update, :destroy]
   before_action :load_address, only: [:update, :destroy]
 
-  # GET /addresses
-  # GET /addresses.json
+  resource_description do
+    desc "Addresses represents a records with geopositional points on the map provided by latitude and longitude"
+    param "Access-Token: ", String, desc: "Access-Token header is expected on all calls", required: true
+    param "Client: ", String, desc: "Client header is expected on all calls", required: true
+    param "Uid: ", String, desc: "Uid header is expected on all calls", required: true
+    error 401, "Unauthorized - Returned when authentication can't be achieved via login or missing/expired api token"
+    error 501, "Not Implemented - Returned when the API version isn't provided in the request headers or isn't supported."
+  end
+
+  def_param_group :address do
+    param :data, Hash, desc: "Address Data", required: true do
+      param :attributes, Hash, desc: "Record Attributes", action_aware: true, required: true do
+        param :latitude, Float, desc: "Address latitude", required: true
+        param :longitude, Float, desc: "Address longitude", required: true
+        param :name, String, desc: "Address person name"
+        param :phone, String, desc: "Address person mobile phone number"
+      end
+    end
+  end
+
+  api :GET, "addresses", "all persons addresses"
+  desc "Path to render all persons addresses, authorized for person only"
+  example self.multiple_example
   def index
     @addresses = current_person.addresses
 
     render json: @addresses
   end
 
-  # GET /addresses/1
-  # GET /addresses/1.json
+  api :GET, "addresses/:id", "single address"
+  desc "Path to render single address, authorized for person and courier"
+  error 404, "Record missing"
+  param :id, Fixnum, required: true, desc: "Address ID"
+  example self.single_example
   def show
     render json: Address.find(params[:id])
   end
 
-  # POST /addresses
-  # POST /addresses.json
+  api :POST, "addresses", "create address"
+  desc "Path to create address, authorized for person only"
+  error 422, "Unprocessable entity - {\"latitude\":[\"can't be blank\"]}"
+  param_group :address
+  example self.single_example
   def create
     @address = current_person.addresses.new(jsonapi_params)
 
@@ -30,8 +57,13 @@ class AddressesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /addresses/1
-  # PATCH/PUT /addresses/1.json
+  api :PATCH, "addresses/:id", "update address"
+  desc "Path to update address, authorized for person only"
+  error 404, "Record missing"
+  error 422, "Unprocessable entity - {\"latitude\":[\"can't be blank\"]}"
+  param :id, Fixnum, desc: "Address ID", required: true
+  param_group :address
+  example self.single_example
   def update
     if @address.update(jsonapi_params)
       render json: @address, status: :ok, location: @address
@@ -40,8 +72,11 @@ class AddressesController < ApplicationController
     end
   end
 
-  # DELETE /addresses/1
-  # DELETE /addresses/1.json
+  api :DELETE, "addresses/:id", "delete address"
+  desc "Path to delete address, authorized for person only"
+  error 404, "Record missing"
+  param :id, Fixnum, desc: "Address ID", required: true
+  example "204 No Content"
   def destroy
     @address.destroy
 
@@ -55,6 +90,6 @@ class AddressesController < ApplicationController
   end
 
   def permitted_params
-    %i(latitude longitude address name phone address)
+    %i(latitude longitude name phone)
   end
 end

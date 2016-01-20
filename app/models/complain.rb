@@ -24,6 +24,7 @@ class Complain < ActiveRecord::Base
 
   OPENED = :opened
   RESOLVED = :resolved
+  STATUSES = [OPENED, RESOLVED]
 
   scope :in_status, ->(status = [OPENED]) { where(status: status) }
 

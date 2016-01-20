@@ -33,6 +33,7 @@ class Order < ActiveRecord::Base
   ASSIGNED = :assigned
   DELIVERED = :delivered
   CLOSED = :closed
+  STATUSES = [OPENED, ASSIGNED, DELIVERED, CLOSED]
 
   delegate :courier, :delivered?, to: :assigned_deal, prefix: false
 

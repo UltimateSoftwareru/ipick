@@ -1,11 +1,52 @@
 class OrdersController < ApplicationController
   devise_token_auth_group :member, contains: [:person, :courier]
   before_action :authenticate_member!, only: [:index, :show]
-  before_action :authenticate_person!, only: [:create, :update, :destroy]
-  before_action :set_order, only: [:show, :update, :destroy]
+  before_action :authenticate_person!, only: [:create, :update]
+  before_action :set_order, only: [:show, :update]
 
-  # GET /orders
-  # GET /orders.json
+  resource_description do
+    desc "Order is a person proposal to deliver something somewhere"
+    param "Access-Token: ", String, desc: "Access-Token header is expected on all calls", required: true
+    param "Client: ", String, desc: "Client header is expected on all calls", required: true
+    param "Uid: ", String, desc: "Uid header is expected on all calls", required: true
+    error 401, "Unauthorized - Returned when authentication can't be achieved via login or missing/expired api token"
+    error 501, "Not Implemented - Returned when the API version isn't provided in the request headers or isn't supported."
+  end
+
+  def_param_group :order do
+    param :data, Hash, desc: "Order Data", required: true do
+      param :attributes, Hash, desc: "Order Attributes", action_aware: true, required: true do
+        param :name, String, desc: "Order name"
+        param :description, String, desc: "Order description"
+        param :status, Order::STATUSES, desc: "Order status"
+        param :price, Fixnum, desc: "Order price"
+        param :weight, Fixnum, desc: "Order weight"
+        param :grab_from, Time, desc: "Start time order should be grabbed by courier"
+        param :grab_to, Time, desc: "End time order should be grabbed by courier"
+        param :deliver_from, Time, desc: "Start time order should be delivered by courier"
+        param :deliver_to, Time, desc: "End time order should be delivered by courier"
+      end
+      param :relationships, Hash, desc: "Order Relationships", required: true do
+        param :from_address, Hash, desc: "From Address Relationship", required: true do
+          param :latitude, Float, desc: "Address latitude", required: true
+          param :longitude, Float, desc: "Address longitude", required: true
+          param :name, String, desc: "Address person name"
+          param :phone, String, desc: "Address person mobile phone number"
+        end
+        param :addresses, Array, desc: "Array of destination addresses Relationship", required: true do
+          param :latitude, Float, desc: "Address latitude", required: true
+          param :longitude, Float, desc: "Address longitude", required: true
+          param :name, String, desc: "Address person name"
+          param :phone, String, desc: "Address person mobile phone number"
+        end
+      end
+    end
+  end
+
+  api :GET, "orders", "all orders by status"
+  desc "Path to render all orders in status, authorized for persons and couriers"
+  param :status, Order::STATUSES, desc: "Status to find orders, 'opened' by default"
+  example self.multiple_example
   def index
     status = params[:status]
     @orders = if current_courier && status.to_sym == Order::OPENED
@@ -17,14 +58,20 @@ class OrdersController < ApplicationController
     render json: @orders, include: [:person, :deals, :assigned_deal, :addresses, :from_address]
   end
 
-  # GET /orders/1
-  # GET /orders/1.json
+  api :GET, "orders/:id", "single order"
+  desc "Path to render single order, authorized for persons and couriers"
+  error 404, "Record missing"
+  param :id, Fixnum, required: true, desc: "Order ID"
+  example self.single_example
   def show
     render json: @order, include: [:person, :deals, :assigned_deal, :addresses, :from_address]
   end
 
-  # POST /orders
-  # POST /orders.json
+  api :POST, "orders", "create order"
+  desc "Path to create order, authorized for persons"
+  error 422, "Unprocessable entity"
+  param_group :order
+  example self.single_example
   def create
     @order = current_person.orders.new(order_params)
 
@@ -36,8 +83,13 @@ class OrdersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /orders/1
-  # PATCH/PUT /orders/1.json
+  api :PATCH, "orders/:id", "update order"
+  desc "Path to update address, authorized for persons"
+  error 404, "Record missing"
+  error 422, "Unprocessable entity"
+  param :id, Fixnum, desc: "Order ID", required: true
+  param_group :order
+  example self.single_example
   def update
     if @order.update(order_params)
       save_addresses
@@ -46,14 +98,6 @@ class OrdersController < ApplicationController
     else
       render json: @order.errors, status: :unprocessable_entity
     end
-  end
-
-  # DELETE /orders/1
-  # DELETE /orders/1.json
-  def destroy
-    @order.destroy
-
-    head :no_content
   end
 
   private

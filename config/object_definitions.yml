@@ -1,0 +1,175 @@
+addresses:
+  single: &single_address
+    data:
+      id: 42
+      type: "addresses"
+      attributes:
+        latitude: 55.947064
+        longitude: 37.4992755000001
+        address: "Moscow, Lenina Str, 42"
+        name: "Ivan"
+        phone: "+79654242424"
+  multiple:
+    data:
+      -
+        <<: *single_address
+complains:
+  single: &single_complain
+    data:
+      id: 42
+      type: "complains"
+      attributes:
+        subject: "Very bad courier"
+        resolution: null
+        status: "opened"
+      relationships:
+        from:
+          data:
+            id: 42
+            type: "people"
+        to:
+          data:
+            id: 42
+            type: "couriers"
+        deal:
+          data:
+            id: 42
+            type: "deals"
+        operator:
+          data:
+            id: 42
+            type: "operators"
+  multiple:
+    data:
+      -
+        <<: *single_complain
+deals:
+  single: &single_deal
+    data:
+      id: 42
+      type: "deals"
+      attributes:
+        status: "in_progress"
+        delivered_at: null
+        created_at: "2016-01-12T17:33:03.661Z"
+        updated_at: "2016-01-12T17:33:03.661Z"
+      relationships:
+        order:
+          data:
+            id: 42
+            type: "orders"
+        to:
+          courier:
+            id: 42
+            type: "couriers"
+  multiple:
+    data:
+      -
+        <<: *single_deal
+transports:
+  single: &single_transport
+    data:
+      id: 42
+      type: "transports"
+      attributes:
+        name: "Bicycle"
+  multiple:
+    data:
+      -
+        <<: *single_transport
+orders:
+  single: &single_order
+    data:
+      id: 42
+      type: "orders"
+      attributes:
+        status: "closed"
+        name: "order"
+        description: "description"
+        value: 100
+        price: 123
+        weight: 3
+        grab_from: "2016-01-16T00:17:00.000Z"
+        grab_to: "2016-01-20T03:00:00.000Z"
+        deliver_from: "2016-01-19T04:00:00.000Z"
+        deliver_to: "2016-01-29T04:00:00.000Z"
+        created_at: "2016-01-15T21:17:58.024Z"
+      relationships:
+        person:
+          data:
+            id: 42
+            type: "person"
+        deals:
+          -
+            id: 42
+            type: "deals"
+        addresses:
+          -
+            id: 42
+            type: "addresses"
+        transports:
+          -
+            id: 42
+            type: "transports"
+        from_address:
+          id: 42
+          type: "addresses"
+  multiple:
+    data:
+      -
+        <<: *single_order
+people: &people
+  single: &single_person
+    data:
+      id: 42
+      type: "people"
+      attributes:
+        name: "order"
+        email: "email"
+        type: "Person"
+        picture: "picture_url"
+      relationships:
+        orders:
+          -
+            data:
+              id: 42
+              type: "orders"
+        addresses:
+          -
+            data:
+              id: 42
+              type: "addresses"
+  multiple:
+    data:
+      -
+        <<: *single_person
+couriers:
+  single: &single_person
+    data:
+      id: 42
+      type: "couriers"
+      attributes:
+        name: "order"
+        email: "email"
+        type: "Corier"
+        picture: "picture_url"
+  multiple:
+    data:
+      -
+        <<: *single_person
+operators:
+  single: &single_operator
+    data:
+      id: 42
+      type: "operators"
+      attributes:
+        name: "order"
+        email: "email"
+        type: "Operator"
+        picture: "picture_url"
+  multiple:
+    data:
+      -
+        <<: *single_operator
+users:
+  <<: *people

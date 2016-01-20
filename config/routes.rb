@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resources :orders, only: [:index, :show, :create, :update, :destroy]
-  resources :complains, only: [:index, :show, :create, :update, :destroy]
-  resources :deals, only: [:index, :show, :update, :create]
+  apipie
+  resources :orders, only: [:index, :show, :create, :update]
+  resources :complains, only: [:index, :show, :create, :update]
+  resources :deals, only: [:index, :show, :update]
   resources :addresses, only: [:index, :show, :update, :create, :destroy]
   resources :transports, only: [:index, :show]
 
@@ -17,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   mount_devise_token_auth_for 'User', at: 'auth'
-  mount_devise_token_auth_for 'Person', at: '/persons/auth'
+  mount_devise_token_auth_for 'Person', at: '/people/auth'
   mount_devise_token_auth_for 'Courier', at: '/couriers/auth'
   mount_devise_token_auth_for 'Operator', at: '/operators/auth'
 end

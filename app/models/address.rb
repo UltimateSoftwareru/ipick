@@ -15,6 +15,8 @@ class Address < ActiveRecord::Base
   belongs_to :person, foreign_key: :user_id
   has_and_belongs_to_many :orders
 
+  validates :latitude, :longitude, presence: true
+
   reverse_geocoded_by :latitude, :longitude, lookup: :yandex
   after_validation :reverse_geocode
   reverse_geocoded_by :latitude, :longitude do |obj, results|
