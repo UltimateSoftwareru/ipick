@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  devise_token_auth_group :member, contains: [:person, :courier]
+  devise_token_auth_group :member, contains: [:person, :courier, :operator]
   before_action :authenticate_member!, only: [:index, :show]
   before_action :authenticate_person!, only: [:create, :update]
   before_action :set_order, only: [:show, :update]
@@ -44,13 +44,15 @@ class OrdersController < ApplicationController
   end
 
   api :GET, "orders", "all orders by status"
-  desc "Path to render all orders in status, authorized for persons and couriers"
+  desc "Path to render all orders in status, authorized for persons, couriers and operators"
   param :status, Order::STATUSES, desc: "Status to find orders, 'opened' by default"
   example self.multiple_example
   def index
-    status = params[:status]
+    status = params[:status] || Order::OPENED
     @orders = if current_courier && status.to_sym == Order::OPENED
                 Order.in_status(status.to_sym).open_for(current_courier.id)
+              elsif current_operator
+                Order.in_status(status.to_sym)
               else
                 current_member.orders.in_status(status.to_sym)
               end
