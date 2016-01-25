@@ -65,7 +65,7 @@ class PeopleController < UsersController
   private
 
   def set_resource
-    @resourse ||= Person.find_by(id: params[:id]).includes(includes)
+    @resourse ||= Person.find_by(id: params[:id])
   end
 
   def set_current_resource
