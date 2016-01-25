@@ -3,10 +3,12 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.0'
 gem 'rails-api', '~> 0.4.0'
 gem 'active_model_serializers', github: "rails-api/active_model_serializers", branch: :master
+gem 'rails-i18n', '~> 4.0.0'
+gem 'devise-i18n', '~> 0.12.1'
 gem 'pg', '~> 0.18.3'
 gem 'bcrypt', '~> 3.1.7'
 gem 'rack-cors', '0.3.0'
-gem 'devise_token_auth', '~> 0.1.36'
+gem 'devise_token_auth', '~> 0.1.37.beta4'
 gem 'omniauth', "~> 1.2.2"
 gem "paperclip", "4.2.1"
 gem "rmagick", "2.14.0", require: false
