@@ -22,6 +22,7 @@ gem 'mailgun_rails', '~> 0.8.0'
 gem 'state_machine', '~> 1.2'
 
 gem 'time_difference', '~> 0.4.2'
+gem 'apipie-rails', '~> 0.3.5'
 
 group :development do
   gem "binding_of_caller", "0.7.1"
@@ -30,15 +31,14 @@ group :development do
   gem "brakeman", "~> 2.6.3", require: false
   gem "letter_opener", "~> 1.3.0"
 
-  # Deployment
-  gem "mina", "~> 0.3.0"
-  gem "mina-multistage", "~> 0.1.1", require: false
-  gem "mina-scp", "~> 0.1.1"
-  gem "java-properties", "~> 0.0.2"
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rbenv'
+  gem 'capistrano3-puma'
 end
 
 group :production do
-  gem "rails_12factor", "0.0.2"
+  gem 'puma'
 end
 
 group :test do
@@ -62,5 +62,4 @@ group :development, :test do
   gem "annotate", "~> 2.6.8"
   gem "annotate_models", "~> 0.0.4"
   gem "rubocop", "~> 0.27.0", require: false
-  gem 'apipie-rails', '~> 0.3.5'
 end
