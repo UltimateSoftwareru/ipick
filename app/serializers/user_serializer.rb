@@ -40,5 +40,14 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :type
+  attributes :id, :name, :email, :type, :phone, :original, :thumb, :icon, :picture
+
+  [:original, :thumb, :icon].each do |version|
+    define_method version do
+      return nil unless object.picture.exists?
+      "#{object.picture(version)}"
+    end
+  end
+
+  alias picture original
 end

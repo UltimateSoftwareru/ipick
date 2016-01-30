@@ -47,14 +47,9 @@ class Courier < User
   belongs_to :complainable, polymorphic: true
   has_many :orders, through: :deals, foreign_key: :user_id
 
-  has_attached_file :picture, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
-  validates_attachment_content_type :picture, content_type: /\Aimage\/.*\Z/
-
   def complains
     Complain.where(from_id: self.id, from_type: self.class.name)
   end
-
-  delegate :finish!, to: :current_activity, prefix: true, allow_nil: true
 
   ACTIVE = :active
   INACTIVE = :inactive
@@ -64,8 +59,13 @@ class Courier < User
     state ACTIVE
     state INACTIVE
 
-    after_transition ACTIVE => INACTIVE, do: :create_current_activity
-    after_transition INACTIVE => ACTIVE, do: :current_activity_finish!
+    after_transition ACTIVE => INACTIVE do |courier, _|
+      courier.current_activity.finish!
+    end
+
+    after_transition INACTIVE => ACTIVE do |courier, _|
+      courier.create_current_activity
+    end
 
     event :reactive do
       transition INACTIVE => ACTIVE

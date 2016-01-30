@@ -39,6 +39,5 @@
 #  longitude              :float
 #
 
-class OperatorSerializer < ActiveModel::Serializer
-  attributes :id, :email, :name, :type
+class OperatorSerializer < UserSerializer
 end

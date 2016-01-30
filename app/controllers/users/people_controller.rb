@@ -56,7 +56,7 @@ class PeopleController < UsersController
   example self.single_example
   def update
     if @resourse.update(jsonapi_params)
-      head :no_content
+      render json: @resourse, include: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end

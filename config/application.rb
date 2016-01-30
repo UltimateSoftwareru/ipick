@@ -23,5 +23,9 @@ module Ipick
           max_age: 0
       end
     end
+    config.paperclip_defaults = {
+      :storage => :s3,
+      :bucket => Rails.application.secrets.aws_config['bucket']
+    }
   end
 end
