@@ -2,7 +2,7 @@ class AddressSaver < BaseSaver
   private
 
   def options
-    params.require(:data)[:relation]
+    params.require(:data)[relation]
   end
 
   def permitted
