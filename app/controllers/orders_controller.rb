@@ -1,8 +1,10 @@
 class OrdersController < ApplicationController
   devise_token_auth_group :member, contains: [:person, :courier, :operator]
+  devise_token_auth_group :orderer, contains: [:person, :courier]
   before_action :authenticate_member!, only: [:index, :show]
-  before_action :authenticate_person!, only: [:create, :update]
-  before_action :set_order, only: [:show, :update]
+  before_action :authenticate_person!, only: [:create]
+  before_action :authenticate_orderer!, only: [:update]
+  before_action :set_order, only: [:update]
 
   resource_description do
     desc "Order is a person proposal to deliver something somewhere"
@@ -66,6 +68,7 @@ class OrdersController < ApplicationController
   param :id, Fixnum, required: true, desc: "Order ID"
   example self.single_example
   def show
+    @order = Order.find(params[:id])
     render json: @order, include: [:person, :deals, :assigned_deal, :addresses, :from_address]
   end
 
@@ -96,7 +99,7 @@ class OrdersController < ApplicationController
     if @order.update(order_params)
       save_addresses
       handle_status_change if status_order_param
-      head :no_content
+      render json: @order, status: :ok
     else
       render json: @order.errors, status: :unprocessable_entity
     end
@@ -105,7 +108,7 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order ||= current_member.orders.find(params[:id])
+    @order ||= Order.find(params[:id])
   end
 
   def order_params

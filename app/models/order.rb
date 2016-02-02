@@ -48,7 +48,9 @@ class Order < ActiveRecord::Base
     state DELIVERED
     state CLOSED
 
-    after_transition ASSIGNED => DELIVERED, do: :delivered_now!
+    after_transition ASSIGNED => DELIVERED do |order|
+      order.delivered_now!
+    end
 
     event :assign do
       transition OPENED => ASSIGNED

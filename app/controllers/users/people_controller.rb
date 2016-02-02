@@ -40,7 +40,7 @@ class PeopleController < UsersController
   end
 
   api :GET, "people/:id", "show person personal info"
-  desc "Path to render person personal info, authorized for people only"
+  desc "Path to render person personal info, authorized for people, couriers and operators"
   error 404, "Record missing"
   param :id, Fixnum, required: true, desc: "Operator ID"
   example self.single_example

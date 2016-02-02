@@ -36,6 +36,7 @@ class OrderSerializer < ActiveModel::Serializer
              :deliver_from,
              :deliver_to,
              :created_at,
+             :updated_at,
              :delivered_at
 
   belongs_to :person, foreign_key: :user_id

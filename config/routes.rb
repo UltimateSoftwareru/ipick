@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   apipie
   resources :orders, only: [:index, :show, :create, :update]
   resources :complains, only: [:index, :show, :create, :update]
-  resources :deals, only: [:index, :show, :update]
+  resources :deals, only: [:index, :show, :create, :update]
   resources :addresses, only: [:index, :show, :update, :create, :destroy]
   resources :transports, only: [:index, :show]
   resources :activities, only: [:index, :show]
