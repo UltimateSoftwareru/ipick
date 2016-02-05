@@ -6,7 +6,8 @@ addresses:
       attributes:
         latitude: 55.947064
         longitude: 37.4992755000001
-        address: "Moscow, Lenina Str, 42"
+        address: "Russia, Moscow, Lenina Str, 42, 213230"
+        short_address: "Lenina Str, 42"
         name: "Ivan"
         phone: "+79654242424"
   multiple:

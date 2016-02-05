@@ -12,5 +12,5 @@
 #
 
 class AddressSerializer < ActiveModel::Serializer
-  attributes :id, :latitude, :longitude, :address, :name, :phone
+  attributes :id, :latitude, :longitude, :address, :short_address, :name, :phone
 end

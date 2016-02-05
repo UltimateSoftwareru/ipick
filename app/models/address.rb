@@ -22,6 +22,7 @@ class Address < ActiveRecord::Base
   reverse_geocoded_by :latitude, :longitude do |obj, results|
     if geo = results.first
       obj.address = geo.address
+      obj.short_address = [geo.route, geo.street_number].join(", ")
     end
   end
   after_validation :reverse_geocode
