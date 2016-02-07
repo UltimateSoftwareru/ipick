@@ -59,7 +59,7 @@ class OrdersController < ApplicationController
                 current_member.orders.in_status(status.to_sym)
               end
 
-    render json: @orders, include: [:person, :deals, :assigned_deal, :addresses, :from_address]
+    render json: @orders.page(params[:page] || 1).per_page(7), include: [:person, :deals, :assigned_deal, :addresses, :from_address]
   end
 
   api :GET, "orders/:id", "single order"

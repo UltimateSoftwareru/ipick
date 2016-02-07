@@ -24,6 +24,8 @@ gem 'state_machine', '~> 1.2'
 gem 'time_difference', '~> 0.4.2'
 gem 'apipie-rails', '~> 0.3.5'
 
+gem 'will_paginate', '~> 3.1'
+
 group :development do
   gem "binding_of_caller", "0.7.1"
   gem "meta_request", "~> 0.3.4"

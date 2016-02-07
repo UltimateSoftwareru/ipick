@@ -314,6 +314,7 @@ GEM
     uniform_notifier (1.9.0)
     warden (1.2.6)
       rack (>= 1.0)
+    will_paginate (3.1.0)
 
 PLATFORMS
   ruby
@@ -366,6 +367,7 @@ DEPENDENCIES
   test_after_commit (~> 0.4.1)
   time_difference (~> 0.4.2)
   traceroute (~> 0.4.0)
+  will_paginate (~> 3.1)
 
 BUNDLED WITH
    1.11.2
