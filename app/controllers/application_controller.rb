@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
+  include PagerApi::Pagination::Kaminari
 
   resource_description do
     formats ["json", "jsonp"]
@@ -31,5 +32,14 @@ class ApplicationController < ActionController::API
 
   def self.object_definitions
     @@definitions ||= ObjectDefinitionsReader.read
+  end
+
+  def meta(collection, options = {})
+    {
+      per_page: options[:per_page].to_i || params[:per_page].to_i || ::Kaminari.config.default_per_page,
+      total_pages: collection.total_pages,
+      total_objects: collection.total_count,
+      page: options[:page].to_i || params[:page].to_i
+    }
   end
 end
