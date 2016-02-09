@@ -59,7 +59,7 @@ class OrdersController < ApplicationController
                 current_member.orders.in_status(status.to_sym)
               end
 
-    paginate @orders, include: [:person, :deals, :assigned_deal, :addresses, :from_address, :transports], per_page: 10
+    paginate @orders, include: includes, per_page: 10
   end
 
   api :GET, "orders/:id", "single order"
@@ -69,7 +69,7 @@ class OrdersController < ApplicationController
   example self.single_example
   def show
     @order = Order.find(params[:id])
-    render json: @order, include: [:person, :deals, :assigned_deal, :addresses, :from_address, :transports]
+    render json: @order, include: includes
   end
 
   api :POST, "orders", "create order"
@@ -82,7 +82,7 @@ class OrdersController < ApplicationController
 
     if @order.save
       save_addresses
-      render json: @order, status: :created, location: @order
+      render json: @order, status: :created, location: @order, include: includes
     else
       render json: @order.errors, status: :unprocessable_entity
     end
@@ -99,7 +99,7 @@ class OrdersController < ApplicationController
     if @order.update(order_params)
       save_addresses
       handle_status_change if status_order_param
-      render json: @order, status: :ok
+      render json: @order, status: :ok, include: includes
     else
       render json: @order.errors, status: :unprocessable_entity
     end
@@ -140,5 +140,9 @@ class OrdersController < ApplicationController
       return if @order.opened?
       @order.reopen!
     end
+  end
+
+  def includes
+    [:person, :deals, :assigned_deal, :addresses, :from_address, :transports]
   end
 end
