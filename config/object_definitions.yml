@@ -32,10 +32,10 @@ complains:
           data:
             id: 42
             type: "couriers"
-        deal:
+        order:
           data:
             id: 42
-            type: "deals"
+            type: "orders"
         operator:
           data:
             id: 42

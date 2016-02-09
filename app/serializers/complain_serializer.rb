@@ -22,5 +22,5 @@ class ComplainSerializer < ActiveModel::Serializer
   belongs_to :operator, foreign_key: :user_id
   belongs_to :from, polymorphic: true
   belongs_to :to, polymorphic: true
-  belongs_to :deal
+  belongs_to :order
 end

@@ -24,8 +24,8 @@ gem 'state_machine', '~> 1.2'
 gem 'time_difference', '~> 0.4.2'
 gem 'apipie-rails', '~> 0.3.5'
 
-gem 'kaminari'
-gem 'pager_api'
+gem 'kaminari', '~> 0.16.3'
+gem 'pager_api', '~> 0.1.1'
 
 group :development do
   gem "binding_of_caller", "0.7.1"

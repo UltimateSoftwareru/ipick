@@ -20,7 +20,6 @@
 class Deal < ActiveRecord::Base
   belongs_to :order
   belongs_to :courier, foreign_key: :user_id
-  has_many :complains
 
   IN_PROGRESS = :in_progress
   DELIVERED = :delivered

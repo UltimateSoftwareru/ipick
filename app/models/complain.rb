@@ -18,7 +18,7 @@
 
 class Complain < ActiveRecord::Base
   belongs_to :operator, foreign_key: :user_id
-  belongs_to :deal
+  belongs_to :order
   belongs_to :from, polymorphic: true
   belongs_to :to, polymorphic: true
 

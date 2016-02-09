@@ -28,6 +28,7 @@ class Order < ActiveRecord::Base
   has_and_belongs_to_many :transports
   has_many :deals, dependent: :destroy
   has_one :assigned_deal, -> { where(status: [Deal::IN_PROGRESS, Deal::DELIVERED]) }, class_name: :Deal
+  has_many :complains
 
   OPENED = :opened
   ASSIGNED = :assigned

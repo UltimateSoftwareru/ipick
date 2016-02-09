@@ -31,9 +31,9 @@ class ComplainsController < ApplicationController
           param :type, String, desc: "Person type"
           param :id, Fixnum, desc: "Person id"
         end
-        param :deal, Hash, desc: "Deal Relationship, deal connected to the complain, if exists" do
-          param :type, String, desc: "Deal type"
-          param :id, Fixnum, desc: "Deal id"
+        param :order, Hash, desc: "Order Relationship, order connected to the complain, if exists" do
+          param :type, String, desc: "Order type"
+          param :id, Fixnum, desc: "Order id"
         end
       end
     end
@@ -113,7 +113,7 @@ class ComplainsController < ApplicationController
   end
 
   def permitted_params
-    %i(subject resolution status deal) + permitted_polymorphic
+    %i(subject resolution status order) + permitted_polymorphic
   end
 
   def status_complain_param

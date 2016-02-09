@@ -44,4 +44,5 @@ class OrderSerializer < ActiveModel::Serializer
   has_many :addresses
   has_many :transports
   belongs_to :from_address
+  has_many :complains
 end
