@@ -7,14 +7,26 @@ class BaseSaver
       parent.transaction do
         parent.public_send(relation).delete_all
         options.map do |option|
-          parent.public_send(relation).create(deserialize(option))
+          option = deserialize(option)
+          if option[:id]
+            address = Address.find(option[:id])
+            address.update(option.except(:id))
+            parent.public_send(relation) << address
+          else
+            parent.public_send(relation).create(option)
+          end
         end
       end
     else
+      option = deserialize(options)
       if parent.public_send(relation).nil?
-        parent.public_send("create_#{relation}", deserialize(options))
+        if option[:id]
+          parent.update("#{relation}_id" => option[:id])
+        else
+          parent.public_send("create_#{relation}", option)
+        end
       else
-        parent.public_send(relation).update(deserialize(options))
+        parent.public_send(relation).update(option)
       end
     end
     parent.save!

@@ -14,5 +14,7 @@
 FactoryGirl.define do
   factory :address, class: Address do
     name { |n| "name_#{n}" }
+    latitude 1
+    longitude 1
   end
 end

@@ -6,7 +6,7 @@ class AddressSaver < BaseSaver
   end
 
   def permitted
-    %i(name phone address latitude longitude)
+    %i(id name phone address latitude longitude)
   end
 
   def deserialize(options)
