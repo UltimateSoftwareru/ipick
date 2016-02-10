@@ -47,6 +47,9 @@ class User < ActiveRecord::Base
 
   establish_connection "iwant_users_#{Rails.env}".to_sym
 
+  has_attached_file :picture, styles: { medium: "300x300>", thumb: "100x100>" }
+  validates_attachment_content_type :picture, content_type: /\Aimage\/.*\Z/
+
   def token_validation_response
     ActiveModel::SerializableResource.new(self).serializable_hash
       .as_json(except: [

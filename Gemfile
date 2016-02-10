@@ -14,6 +14,7 @@ gem "paperclip", "4.2.1"
 gem "rmagick", "2.14.0", require: false
 gem 'geocoder', '~> 1.2', '>= 1.2.12'
 gem "concord", "~> 0.1.5"
+gem 'aws-sdk', '< 2.0'
 
 gem 'seedbank', '~> 0.3.0'
 gem 'ffaker', '~> 2.1'

@@ -39,8 +39,8 @@
 #  longitude              :float
 #
 
-class CourierSerializer < ActiveModel::Serializer
-  attributes :id, :email, :name, :type, :status, :phone, :latitude, :longitude
+class CourierSerializer < UserSerializer
+  attributes :status, :latitude, :longitude
 
   has_many :activities, foreign_key: :user_id
 end

@@ -66,7 +66,7 @@ class CouriersController < UsersController
   def update
     if @resourse.update(courier_update_params)
       handle_status_change if status_courier_param
-      head :no_content
+      render json: @resourse, include: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end
@@ -95,11 +95,12 @@ class CouriersController < UsersController
   end
 
   def handle_status_change
+    return if current_courier.status == status_courier_param
     case status_courier_param.to_sym
     when Courier::ACTIVE
-      @courier.reactive!
+      @resource.reactive!
     when Courier::INACTIVE
-      @courier.disactive!
+      @resource.disactive!
     end
   end
 
