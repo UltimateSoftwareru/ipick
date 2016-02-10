@@ -26,6 +26,7 @@ class OperatorsController < UsersController
   example self.multiple_example
   def index
     @operators = Operator.all
+
     render json: @operators, include: "**"
   end
 
