@@ -21,6 +21,7 @@ complains:
       type: "complains"
       attributes:
         subject: "Very bad courier"
+        body: "Lates more then a day"
         resolution: null
         status: "opened"
       relationships:

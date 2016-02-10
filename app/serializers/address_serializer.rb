@@ -2,13 +2,14 @@
 #
 # Table name: addresses
 #
-#  id        :integer          not null, primary key
-#  name      :string
-#  phone     :string
-#  user_id   :integer
-#  latitude  :float
-#  longitude :float
-#  address   :string
+#  id            :integer          not null, primary key
+#  name          :string
+#  phone         :string
+#  user_id       :integer
+#  latitude      :float
+#  longitude     :float
+#  address       :string
+#  short_address :string
 #
 
 class AddressSerializer < ActiveModel::Serializer

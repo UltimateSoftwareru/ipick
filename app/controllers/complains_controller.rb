@@ -18,7 +18,8 @@ class ComplainsController < ApplicationController
   def_param_group :complain do
     param :data, Hash, desc: "Complain Data", required: true do
       param :attributes, Hash, desc: "Complain Attributes", action_aware: true, required: true do
-        param :subject, String, desc: "Complain subject"
+        param :subject, Integer, desc: "Complain subject"
+        param :body, String, desc: "Complain body"
         param :resolution, String, desc: "Complain resolution"
         param :status, Complain::STATUSES, desc: "Complain status"
       end

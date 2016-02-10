@@ -11,9 +11,10 @@
 #  to_id      :integer
 #  from_id    :integer
 #  user_id    :integer
-#  deal_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
+#  order_id   :integer
+#  body       :text
 #
 
 class Complain < ActiveRecord::Base

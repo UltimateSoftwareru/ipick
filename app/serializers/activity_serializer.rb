@@ -2,12 +2,11 @@
 #
 # Table name: activities
 #
-#  id          :integer          not null, primary key
-#  user_id     :integer
-#  minutes     :integer
-#  deals_count :integer
-#  start       :datetime
-#  finish      :datetime
+#  id      :integer          not null, primary key
+#  user_id :integer
+#  minutes :integer
+#  start   :datetime
+#  finish  :datetime
 #
 
 class ActivitySerializer < ActiveModel::Serializer

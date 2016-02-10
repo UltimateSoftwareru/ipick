@@ -11,13 +11,14 @@
 #  to_id      :integer
 #  from_id    :integer
 #  user_id    :integer
-#  deal_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
+#  order_id   :integer
+#  body       :text
 #
 
 class ComplainSerializer < ActiveModel::Serializer
-  attributes :id, :subject, :resolution, :status
+  attributes :id, :subject, :body, :resolution, :status
 
   belongs_to :operator, foreign_key: :user_id
   belongs_to :from, polymorphic: true
