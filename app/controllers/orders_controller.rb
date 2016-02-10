@@ -79,7 +79,6 @@ class OrdersController < ApplicationController
   example self.single_example
   def create
     @order = current_person.orders.new(order_params)
-
     if @order.save
       save_addresses
       render json: @order, status: :created, location: @order, include: includes

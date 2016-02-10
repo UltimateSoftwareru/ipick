@@ -26,6 +26,7 @@ gem 'apipie-rails', '~> 0.3.5'
 
 gem 'kaminari', '~> 0.16.3'
 gem 'pager_api', '~> 0.1.1'
+gem 'actioncable', github: "rails/actioncable", branch: :archive
 
 group :development do
   gem "binding_of_caller", "0.7.1"
