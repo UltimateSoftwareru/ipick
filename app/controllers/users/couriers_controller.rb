@@ -34,10 +34,11 @@ class CouriersController < UsersController
 
   api :GET, "couriers", "all couriers"
   desc "Path to render all couriers, authorized for persons, couriers and operators"
+  param :page, Integer, "Used to Pagination, per_page: 10"
   example self.multiple_example
   def index
     @couriers = Courier.all
-    render json: @couriers, include: "**"
+    paginate @couriers, include: "**", per_page: 10
   end
 
   api :GET, "couriers/me", "current couriers personal info"

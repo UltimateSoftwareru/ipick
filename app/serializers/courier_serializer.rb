@@ -40,7 +40,7 @@
 #
 
 class CourierSerializer < ActiveModel::Serializer
-  attributes :id, :email, :name, :type
+  attributes :id, :email, :name, :type, :status, :phone, :latitude, :longitude
 
   has_many :activities, foreign_key: :user_id
 end

@@ -48,6 +48,7 @@ class OrdersController < ApplicationController
   api :GET, "orders", "all orders by status"
   desc "Path to render all orders in status, authorized for persons, couriers and operators"
   param :status, Order::STATUSES, desc: "Status to find orders, 'opened' by default"
+  param :page, Integer, "Used to Pagination, per_page: 10"
   example self.multiple_example
   def index
     status = params[:status] || Order::OPENED
