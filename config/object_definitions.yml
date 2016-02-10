@@ -166,6 +166,13 @@ couriers:
         email: "email"
         type: "Corier"
         picture: "picture_url"
+      relationships:
+        finished_activities:
+          -
+            data:
+              id: 42
+              type: "activities"
+
   multiple:
     data:
       -

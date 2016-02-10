@@ -42,5 +42,5 @@
 class CourierSerializer < UserSerializer
   attributes :status, :latitude, :longitude
 
-  has_many :activities, foreign_key: :user_id
+  has_many :finished_activities, foreign_key: :user_id
 end

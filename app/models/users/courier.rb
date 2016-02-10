@@ -40,7 +40,7 @@
 #
 
 class Courier < User
-  has_many :activities, foreign_key: :user_id
+  has_many :finished_activities, -> { where.not(finish: nil) }, foreign_key: :user_id, class_name: :Activity
   has_one :current_activity, -> { where(finish: nil) }, foreign_key: :user_id, class_name: :Activity
   belongs_to :transport
   has_many :deals, foreign_key: :user_id
