@@ -16,7 +16,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address:              'smtp.yandex.ru',
     port:                 587,
-    domain:               'localhost:3000',
+    domain:               'ultimatesoftware.ru',
     user_name:            'ultimatesoftware@yandex.ru',
     password:             'D9c-55y-y9F-Ar9',
     authentication:       'plain',
