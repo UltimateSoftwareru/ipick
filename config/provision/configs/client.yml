@@ -1,0 +1,6 @@
+development:
+  host: "http://localhost:4200"
+test:
+  host: "http://localhost:4200"
+production:
+  host: "http://localhost:4200"

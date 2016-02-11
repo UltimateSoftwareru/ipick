@@ -152,6 +152,14 @@
       copy: 'src=configs/secrets.yml dest={{ application }}/shared/config/secrets.yml owner={{ user }} group={{ user }} mode=0644'
       sudo: yes
 
+    - name: 'rails | copy client.yml'
+      template: 'src=configs/client.yml dest={{ application }}/shared/config/client.yml owner={{ user }} group={{ user }} mode=0644'
+      sudo: yes
+
+    - name: 'rails | copy database.yml'
+      template: 'src=configs/database.yml dest={{ application }}/shared/config/database.yml owner={{ user }} group={{ user }} mode=0644'
+      sudo: yes
+
     - name: 'nginx | check config'
       command: 'test -f /etc/nginx/sites-enabled/{{ name }}.conf'
       register: 'nginx_config_copied'

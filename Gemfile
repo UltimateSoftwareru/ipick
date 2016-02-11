@@ -29,6 +29,8 @@ gem 'kaminari', '~> 0.16.3'
 gem 'pager_api', '~> 0.1.1'
 gem 'actioncable', github: "rails/actioncable", branch: :archive
 
+gem 'sidekiq'
+
 group :development do
   gem "binding_of_caller", "0.7.1"
   gem "meta_request", "~> 0.3.4"
