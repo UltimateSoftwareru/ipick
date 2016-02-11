@@ -17,7 +17,7 @@ class TransportsController < ApplicationController
   def index
     @transports = Transport.all
 
-    render json: @transports
+    render json: @transports, includes: includes
   end
 
   api :GET, "transports/:id", "single transport"
@@ -28,6 +28,12 @@ class TransportsController < ApplicationController
   def show
     @transport ||= Transport.find_by(id: params[:id])
 
-    render json: @transport
+    render json: @transport, includes: includes
+  end
+
+  private
+
+  def includes
+    %i(orders)
   end
 end

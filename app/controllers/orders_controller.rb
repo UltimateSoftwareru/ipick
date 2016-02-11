@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
                 current_member.orders.in_status(status.to_sym)
               end
 
-    paginate @orders, include: includes, per_page: 10
+    paginate @orders, includes: includes, per_page: 10
   end
 
   api :GET, "orders/:id", "single order"
@@ -70,7 +70,7 @@ class OrdersController < ApplicationController
   example self.single_example
   def show
     @order = Order.find(params[:id])
-    render json: @order, include: includes
+    render json: @order, includes: includes
   end
 
   api :POST, "orders", "create order"
@@ -82,7 +82,7 @@ class OrdersController < ApplicationController
     @order = current_person.orders.new(order_params)
     if @order.save
       save_addresses
-      render json: @order, status: :created, location: @order, include: includes
+      render json: @order, status: :created, location: @order, includes: includes
     else
       render json: @order.errors, status: :unprocessable_entity
     end
@@ -99,7 +99,7 @@ class OrdersController < ApplicationController
     if @order.update(order_params)
       save_addresses
       handle_status_change if status_order_param
-      render json: @order, status: :ok, include: includes
+      render json: @order, status: :ok, includes: includes
     else
       render json: @order.errors, status: :unprocessable_entity
     end

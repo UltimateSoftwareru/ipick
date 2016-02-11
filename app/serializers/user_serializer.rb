@@ -45,7 +45,7 @@ class UserSerializer < ActiveModel::Serializer
   [:original, :thumb, :icon].each do |version|
     define_method version do
       return nil unless object.picture.exists?
-      "#{object.picture(version)}"
+      object.picture(version)
     end
   end
 

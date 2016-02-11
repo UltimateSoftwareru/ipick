@@ -30,7 +30,7 @@ class AddressesController < ApplicationController
   def index
     @addresses = current_person.addresses
 
-    render json: @addresses
+    render json: @addresses, includes: includes
   end
 
   api :GET, "addresses/:id", "single address"
@@ -39,7 +39,7 @@ class AddressesController < ApplicationController
   param :id, Fixnum, required: true, desc: "Address ID"
   example self.single_example
   def show
-    render json: Address.find(params[:id])
+    render json: Address.find(params[:id]), includes: includes
   end
 
   api :POST, "addresses", "create address"
@@ -51,7 +51,7 @@ class AddressesController < ApplicationController
     @address = current_person.addresses.new(jsonapi_params)
 
     if @address.save
-      render json: @address, status: :created, location: @address
+      render json: @address, status: :created, includes: includes
     else
       render json: @address.errors, status: :unprocessable_entity
     end
@@ -66,7 +66,7 @@ class AddressesController < ApplicationController
   example self.single_example
   def update
     if @address.update(jsonapi_params)
-      render json: @address, status: :ok, location: @address
+      render json: @address, status: :ok, includes: includes
     else
       render json: @address.errors, status: :unprocessable_entity
     end
@@ -91,5 +91,9 @@ class AddressesController < ApplicationController
 
   def permitted_params
     %i(latitude longitude name phone)
+  end
+
+  def includes
+    %i(person order)
   end
 end

@@ -38,14 +38,14 @@ class CouriersController < UsersController
   example self.multiple_example
   def index
     @couriers = Courier.all
-    paginate @couriers, include: "**", per_page: 10
+    paginate @couriers, includes: includes, per_page: 10
   end
 
   api :GET, "couriers/me", "current couriers personal info"
   desc "Path to render current logged in courier personal info, authorized for couriers only"
   example self.single_example
   def me
-    render json: @resourse, include: includes
+    render json: @resourse, includes: includes
   end
 
   api :GET, "couriers/:id", "show courier personal info"
@@ -54,7 +54,7 @@ class CouriersController < UsersController
   param :id, Fixnum, required: true, desc: "Operator ID"
   example self.single_example
   def show
-    render json: @resourse, include: includes
+    render json: @resourse, includes: includes
   end
 
   api :PATCH, "couriers/:id", "update courier"
@@ -66,7 +66,7 @@ class CouriersController < UsersController
   def update
     if @resourse.update(courier_update_params)
       handle_status_change if status_courier_param
-      render json: @resourse, include: includes
+      render json: @resourse, includes: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end
@@ -105,6 +105,6 @@ class CouriersController < UsersController
   end
 
   def includes
-    %i(deals transport activities current_activity orders)
+    %i(deals transport finished_activities current_activity orders)
   end
 end

@@ -29,14 +29,14 @@ class PeopleController < UsersController
   def index
     @persons = Person.all.includes(includes)
 
-    render json: @persons, include: includes
+    render json: @persons, includes: includes
   end
 
   api :GET, "people/me", "current people personal info"
   desc "Path to render current logged in person personal info, authorized for people only"
   example self.single_example
   def me
-    render json: @resourse, include: includes
+    render json: @resourse, includes: includes
   end
 
   api :GET, "people/:id", "show person personal info"
@@ -45,7 +45,7 @@ class PeopleController < UsersController
   param :id, Fixnum, required: true, desc: "Operator ID"
   example self.single_example
   def show
-    render json: @resourse, include: includes
+    render json: @resourse, includes: includes
   end
 
   api :PATCH, "people/:id", "update person"
@@ -56,7 +56,7 @@ class PeopleController < UsersController
   example self.single_example
   def update
     if @resourse.update(jsonapi_params)
-      render json: @resourse, include: includes
+      render json: @resourse, includes: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end

@@ -1,8 +1,8 @@
 class DealsController < ApplicationController
-  devise_token_auth_group :member, contains: [:person, :courier]
+  devise_token_auth_group :member, contains: [:person, :courier, :operator]
   before_action :authenticate_member!, only: [:index, :show]
   before_action :authenticate_courier!, only: [:create, :update]
-  before_action :set_deal, only: [:show, :update]
+  before_action :set_deal, only: [:update]
 
   resource_description do
     desc "Deal is a middlerecord between order and courier, can be accepted, declined or delivered(if accepted)"
@@ -34,7 +34,7 @@ class DealsController < ApplicationController
   def index
     @deals = current_member.deals.in_status(params[:status] || Deal::IN_PROGRESS)
 
-    render json: @deals, include: [:order]
+    render json: @deals, includes: includes
   end
 
   api :GET, "deals/:id", "single deal"
@@ -43,7 +43,8 @@ class DealsController < ApplicationController
   param :id, Fixnum, required: true, desc: "Deal ID"
   example self.single_example
   def show
-    render json: @deal, include: [:order]
+    @deal ||= Deal.find_by(id: params[:id])
+    render json: @deal, includes: includes
   end
 
   api :POST, "deals", "create deal"
@@ -55,7 +56,7 @@ class DealsController < ApplicationController
     @deal = current_courier.deals.new(deal_update_params)
 
     if @deal.save
-      render json: @deal, status: :created, location: @deal
+      render json: @deal, status: :created, includes: includes
     else
       render json: @deal.errors, status: :unprocessable_entity
     end
@@ -71,7 +72,7 @@ class DealsController < ApplicationController
   def update
     if @deal.update(deal_update_params)
       handle_status_change if status_deal_param
-      render json: @deal, status: :ok
+      render json: @deal, status: :ok, includes: includes
     else
       render json: @deal.errors, status: :unprocessable_entity
     end
@@ -93,6 +94,10 @@ class DealsController < ApplicationController
 
   def status_deal_param
     jsonapi_params[:status]
+  end
+
+  def includes
+    %i(order)
   end
 
   def handle_status_change

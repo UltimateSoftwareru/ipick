@@ -1,7 +1,7 @@
 class ActivitiesController < ApplicationController
   devise_token_auth_group :member, contains: [:person, :courier, :operator]
   before_action :authenticate_member!, only: [:index, :show]
-  before_action :load_courier, only: [:index, :show]
+  before_action :load_courier, only: [:index]
 
   resource_description do
     desc "Activity represents a history when courier was in active status"
@@ -19,7 +19,7 @@ class ActivitiesController < ApplicationController
   def index
     @activities = @courier.activities
 
-    render json: @activities
+    render json: @activities, includes: includes
   end
 
   api :GET, "activities/:id", "single activity"
@@ -29,14 +29,18 @@ class ActivitiesController < ApplicationController
   param :courier_id, Fixnum, desc: "Courier ID, required if authorized operator or person"
   example self.single_example
   def show
-    @activity ||= @courier.activities.find_by(id: params[:id])
+    @activity ||= Activity.find_by(id: params[:id])
 
-    render json: @activity
+    render json: @activity, includes: includes
   end
 
   private
 
   def load_courier
     @courier ||= current_courier || Courier.find_by(id: params[:courier_id])
+  end
+
+  def includes
+    %i(courier)
   end
 end

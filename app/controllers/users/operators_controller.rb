@@ -27,14 +27,14 @@ class OperatorsController < UsersController
   def index
     @operators = Operator.all
 
-    render json: @operators, include: "**"
+    render json: @operators, includes: includes
   end
 
   api :GET, "operators/me", "current operators personal info"
   desc "Path to render current logged in operator personal info, authorized for operators only"
   example self.single_example
   def me
-    render json: @resourse, include: includes
+    render json: @resourse, includes: includes
   end
 
   api :GET, "operators/:id", "show operator personal info"
@@ -43,7 +43,7 @@ class OperatorsController < UsersController
   param :id, Fixnum, required: true, desc: "Operator ID"
   example self.single_example
   def show
-    render json: @resourse, include: includes
+    render json: @resourse, includes: includes
   end
 
   api :PATCH, "operators/:id", "update operator"
@@ -54,7 +54,7 @@ class OperatorsController < UsersController
   example self.single_example
   def update
     if @resourse.update(jsonapi_params)
-      render json: @resourse, include: includes
+      render json: @resourse, includes: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end

@@ -48,7 +48,7 @@ class ComplainsController < ApplicationController
   def index
     @complains = Complain.in_status(params[:status] || Complain::OPENED)
 
-    paginate @complains, include: includes, per_page: 10
+    paginate @complains, includes: includes, per_page: 10
   end
 
   api :GET, "complains/:id", "single complain"
@@ -57,7 +57,7 @@ class ComplainsController < ApplicationController
   param :id, Fixnum, required: true, desc: "Complain ID"
   example self.single_example
   def show
-    render json: @complain, include: includes
+    render json: @complain, includes: includes
   end
 
   api :POST, "complains", "create complain"
@@ -69,7 +69,7 @@ class ComplainsController < ApplicationController
     @complain = current_complainer.complains.new(complain_params)
 
     if @complain.save
-      render json: @complain, status: :created, include: includes
+      render json: @complain, status: :created, includes: includes
     else
       render json: @complain.errors, status: :unprocessable_entity
     end
@@ -85,7 +85,7 @@ class ComplainsController < ApplicationController
   def update
     if @complain.update(complain_update_params)
       handle_status_change if status_complain_param
-      render json: @complain, status: :ok, include: includes
+      render json: @complain, status: :ok, includes: includes
     else
       render json: @complain.errors, status: :unprocessable_entity
     end
