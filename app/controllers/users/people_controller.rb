@@ -14,6 +14,7 @@ class PeopleController < UsersController
   end
 
   def_param_group :person do
+    param :includes, Array, desc: "Include relations for better perfomance"
     param :data, Hash, desc: "Person Data", required: true do
       param :attributes, Hash, desc: "Person Attributes", required: true do
         param :email, String, desc: "Person email"
@@ -27,16 +28,16 @@ class PeopleController < UsersController
   desc "Path to render all people, authorized for persons, people and operators"
   example self.multiple_example
   def index
-    @persons = Person.all.includes(includes)
+    @persons = Person.all
 
-    render json: @persons, includes: includes
+    render json: @persons, include: includes
   end
 
   api :GET, "people/me", "current people personal info"
   desc "Path to render current logged in person personal info, authorized for people only"
   example self.single_example
   def me
-    render json: @resourse, includes: includes
+    render json: @resourse, include: includes
   end
 
   api :GET, "people/:id", "show person personal info"
@@ -45,7 +46,7 @@ class PeopleController < UsersController
   param :id, Fixnum, required: true, desc: "Operator ID"
   example self.single_example
   def show
-    render json: @resourse, includes: includes
+    render json: @resourse, include: includes
   end
 
   api :PATCH, "people/:id", "update person"
@@ -56,7 +57,7 @@ class PeopleController < UsersController
   example self.single_example
   def update
     if @resourse.update(jsonapi_params)
-      render json: @resourse, includes: includes
+      render json: @resourse, include: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end
@@ -77,6 +78,6 @@ class PeopleController < UsersController
   end
 
   def includes
-    %i(addresses)
+    %i(addresses) + (params[:includes] || [])
   end
 end

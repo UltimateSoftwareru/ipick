@@ -19,7 +19,7 @@ class ActivitiesController < ApplicationController
   def index
     @activities = @courier.activities
 
-    render json: @activities, includes: includes
+    render json: @activities, include: includes
   end
 
   api :GET, "activities/:id", "single activity"
@@ -31,7 +31,7 @@ class ActivitiesController < ApplicationController
   def show
     @activity ||= Activity.find_by(id: params[:id])
 
-    render json: @activity, includes: includes
+    render json: @activity, include: includes
   end
 
   private
@@ -41,6 +41,6 @@ class ActivitiesController < ApplicationController
   end
 
   def includes
-    %i(courier)
+    %i(courier completed_deals) + (params[:includes] || [])
   end
 end

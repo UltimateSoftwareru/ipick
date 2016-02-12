@@ -46,8 +46,4 @@ class UsersController < ApplicationController
   def auth_sign_up
     raise "Do not use, just a stub for apidoc"
   end
-
-  def includes
-    %i()
-  end
 end

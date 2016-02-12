@@ -9,7 +9,7 @@ class BaseSaver
         options.map do |option|
           option = deserialize(option)
           if option[:id]
-            address = Address.find(option[:id])
+            address = Address.find_by(id: option[:id])
             address.update(option.except(:id))
             parent.public_send(relation) << address
           else

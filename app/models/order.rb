@@ -43,7 +43,6 @@ class Order < ActiveRecord::Base
   scope :in_status, ->(status = [OPENED, ASSIGNED]) { where(status: status) }
   #FIXME: use -1 hack due to bug with NOT IN [] operand
   scope :open_for, ->(courier_id) { where("id NOT IN (?)", [-1, *Deal.declined_by(courier_id).pluck(:order_id)]) }
-  default_scope { includes(:person, :deals, :transports, :addresses, :from_address) }
 
   state_machine :status, initial: OPENED do
     state OPENED
@@ -80,7 +79,7 @@ class Order < ActiveRecord::Base
   private
 
   def notify_agents!
-    options = { includes: [:person, :from_address, :addresses, :transports, :deals] }
+    options = { include: [:person, :from_address, :addresses, :transports, :deals] }
     order = ActiveModel::SerializableResource.new(self, options)
 
     order_json = order.as_json

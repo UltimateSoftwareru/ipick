@@ -14,6 +14,7 @@ class AddressesController < ApplicationController
   end
 
   def_param_group :address do
+    param :includes, Array, desc: "Include relations for better perfomance"
     param :data, Hash, desc: "Address Data", required: true do
       param :attributes, Hash, desc: "Record Attributes", action_aware: true, required: true do
         param :latitude, Float, desc: "Address latitude", required: true
@@ -30,7 +31,7 @@ class AddressesController < ApplicationController
   def index
     @addresses = current_person.addresses
 
-    render json: @addresses, includes: includes
+    render json: @addresses, include: includes
   end
 
   api :GET, "addresses/:id", "single address"
@@ -39,7 +40,7 @@ class AddressesController < ApplicationController
   param :id, Fixnum, required: true, desc: "Address ID"
   example self.single_example
   def show
-    render json: Address.find(params[:id]), includes: includes
+    render json: Address.find_by(id: params[:id]), include: includes
   end
 
   api :POST, "addresses", "create address"
@@ -51,7 +52,7 @@ class AddressesController < ApplicationController
     @address = current_person.addresses.new(jsonapi_params)
 
     if @address.save
-      render json: @address, status: :created, includes: includes
+      render json: @address, status: :created, include: includes
     else
       render json: @address.errors, status: :unprocessable_entity
     end
@@ -66,7 +67,7 @@ class AddressesController < ApplicationController
   example self.single_example
   def update
     if @address.update(jsonapi_params)
-      render json: @address, status: :ok, includes: includes
+      render json: @address, status: :ok, include: includes
     else
       render json: @address.errors, status: :unprocessable_entity
     end
@@ -86,7 +87,7 @@ class AddressesController < ApplicationController
   private
 
   def load_address
-    @address ||= current_person.addresses.find(params[:id])
+    @address ||= current_person.addresses.find_by(id: params[:id])
   end
 
   def permitted_params
@@ -94,6 +95,6 @@ class AddressesController < ApplicationController
   end
 
   def includes
-    %i(person order)
+    %i() + (params[:includes] || [])
   end
 end

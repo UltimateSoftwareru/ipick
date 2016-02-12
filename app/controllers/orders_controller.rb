@@ -16,6 +16,7 @@ class OrdersController < ApplicationController
   end
 
   def_param_group :order do
+    param :includes, Array, desc: "Include relations for better perfomance"
     param :data, Hash, desc: "Order Data", required: true do
       param :attributes, Hash, desc: "Order Attributes", action_aware: true, required: true do
         param :name, String, desc: "Order name"
@@ -60,7 +61,7 @@ class OrdersController < ApplicationController
                 current_member.orders.in_status(status.to_sym)
               end
 
-    paginate @orders, includes: includes, per_page: 10
+    paginate @orders, include: includes, per_page: 10
   end
 
   api :GET, "orders/:id", "single order"
@@ -69,8 +70,8 @@ class OrdersController < ApplicationController
   param :id, Fixnum, required: true, desc: "Order ID"
   example self.single_example
   def show
-    @order = Order.find(params[:id])
-    render json: @order, includes: includes
+    @order = Order.find_by(id: params[:id])
+    render json: @order, include: includes
   end
 
   api :POST, "orders", "create order"
@@ -82,7 +83,7 @@ class OrdersController < ApplicationController
     @order = current_person.orders.new(order_params)
     if @order.save
       save_addresses
-      render json: @order, status: :created, location: @order, includes: includes
+      render json: @order, status: :created, location: @order, include: includes
     else
       render json: @order.errors, status: :unprocessable_entity
     end
@@ -99,7 +100,7 @@ class OrdersController < ApplicationController
     if @order.update(order_params)
       save_addresses
       handle_status_change if status_order_param
-      render json: @order, status: :ok, includes: includes
+      render json: @order, status: :ok, include: includes
     else
       render json: @order.errors, status: :unprocessable_entity
     end
@@ -108,7 +109,7 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order ||= Order.find(params[:id])
+    @order ||= Order.find_by(id: params[:id])
   end
 
   def order_params
@@ -143,6 +144,6 @@ class OrdersController < ApplicationController
   end
 
   def includes
-    [:person, :deals, :assigned_deal, :addresses, :from_address, :transports]
+    %i(addresses from_address) + (params[:includes] || [])
   end
 end

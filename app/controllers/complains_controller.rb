@@ -16,6 +16,7 @@ class ComplainsController < ApplicationController
   end
 
   def_param_group :complain do
+    param :includes, Array, desc: "Include relations for better perfomance"
     param :data, Hash, desc: "Complain Data", required: true do
       param :attributes, Hash, desc: "Complain Attributes", action_aware: true, required: true do
         param :subject, Integer, desc: "Complain subject"
@@ -48,7 +49,7 @@ class ComplainsController < ApplicationController
   def index
     @complains = Complain.in_status(params[:status] || Complain::OPENED)
 
-    paginate @complains, includes: includes, per_page: 10
+    paginate @complains, include: includes, per_page: 10
   end
 
   api :GET, "complains/:id", "single complain"
@@ -57,7 +58,7 @@ class ComplainsController < ApplicationController
   param :id, Fixnum, required: true, desc: "Complain ID"
   example self.single_example
   def show
-    render json: @complain, includes: includes
+    render json: @complain, include: includes
   end
 
   api :POST, "complains", "create complain"
@@ -69,7 +70,7 @@ class ComplainsController < ApplicationController
     @complain = current_complainer.complains.new(complain_params)
 
     if @complain.save
-      render json: @complain, status: :created, includes: includes
+      render json: @complain, status: :created, include: includes
     else
       render json: @complain.errors, status: :unprocessable_entity
     end
@@ -85,7 +86,7 @@ class ComplainsController < ApplicationController
   def update
     if @complain.update(complain_update_params)
       handle_status_change if status_complain_param
-      render json: @complain, status: :ok, includes: includes
+      render json: @complain, status: :ok, include: includes
     else
       render json: @complain.errors, status: :unprocessable_entity
     end
@@ -123,7 +124,7 @@ class ComplainsController < ApplicationController
   end
 
   def includes
-    %i(operator order from to)
+    %i(operator order from to) + (params[:includes] || [])
   end
 
   def handle_status_change

@@ -12,6 +12,7 @@ class OperatorsController < UsersController
   end
 
   def_param_group :courier do
+    param :includes, Array, desc: "Include relations for better perfomance"
     param :data, Hash, desc: "Operator Data", required: true do
       param :attributes, Hash, desc: "Operator Attributes", required: true do
         param :email, String, desc: "Operator email"
@@ -27,14 +28,14 @@ class OperatorsController < UsersController
   def index
     @operators = Operator.all
 
-    render json: @operators, includes: includes
+    render json: @operators, include: includes
   end
 
   api :GET, "operators/me", "current operators personal info"
   desc "Path to render current logged in operator personal info, authorized for operators only"
   example self.single_example
   def me
-    render json: @resourse, includes: includes
+    render json: @resourse, include: includes
   end
 
   api :GET, "operators/:id", "show operator personal info"
@@ -43,7 +44,7 @@ class OperatorsController < UsersController
   param :id, Fixnum, required: true, desc: "Operator ID"
   example self.single_example
   def show
-    render json: @resourse, includes: includes
+    render json: @resourse, include: includes
   end
 
   api :PATCH, "operators/:id", "update operator"
@@ -54,7 +55,7 @@ class OperatorsController < UsersController
   example self.single_example
   def update
     if @resourse.update(jsonapi_params)
-      render json: @resourse, includes: includes
+      render json: @resourse, include: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end
@@ -63,7 +64,7 @@ class OperatorsController < UsersController
   private
 
   def set_resource
-    @resourse ||= Operator.find(params[:id])
+    @resourse ||= Operator.find_by(id: params[:id])
   end
 
   def set_current_resource
@@ -75,6 +76,6 @@ class OperatorsController < UsersController
   end
 
   def includes
-    %i(complains)
+    %i(complains) + (params[:includes] || [])
   end
 end

@@ -14,6 +14,7 @@ class CouriersController < UsersController
   end
 
   def_param_group :courier do
+    param :includes, Array, desc: "Include relations for better perfomance"
     param :data, Hash, desc: "Courier Data", required: true do
       param :attributes, Hash, desc: "Courier Attributes", required: true do
         param :email, String, desc: "Courier email"
@@ -38,14 +39,14 @@ class CouriersController < UsersController
   example self.multiple_example
   def index
     @couriers = Courier.all
-    paginate @couriers, includes: includes, per_page: 10
+    paginate @couriers, per_page: 10, include: includes
   end
 
   api :GET, "couriers/me", "current couriers personal info"
   desc "Path to render current logged in courier personal info, authorized for couriers only"
   example self.single_example
   def me
-    render json: @resourse, includes: includes
+    render json: @resourse, include: includes
   end
 
   api :GET, "couriers/:id", "show courier personal info"
@@ -54,7 +55,7 @@ class CouriersController < UsersController
   param :id, Fixnum, required: true, desc: "Operator ID"
   example self.single_example
   def show
-    render json: @resourse, includes: includes
+    render json: @resourse, include: includes
   end
 
   api :PATCH, "couriers/:id", "update courier"
@@ -66,7 +67,7 @@ class CouriersController < UsersController
   def update
     if @resourse.update(courier_update_params)
       handle_status_change if status_courier_param
-      render json: @resourse, includes: includes
+      render json: @resourse, include: includes
     else
       render json: @resourse.errors, status: :unprocessable_entity
     end
@@ -75,7 +76,7 @@ class CouriersController < UsersController
   private
 
   def set_resource
-    @resourse ||= Courier.find(params[:id])
+    @resourse ||= Courier.find_by(id: params[:id])
   end
 
   def set_current_resource
@@ -105,6 +106,6 @@ class CouriersController < UsersController
   end
 
   def includes
-    %i(deals transport finished_activities current_activity orders)
+    %i(deals finished_activities current_activity) + (params[:includes] || [])
   end
 end

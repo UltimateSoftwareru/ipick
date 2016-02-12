@@ -14,6 +14,7 @@ class DealsController < ApplicationController
   end
 
   def_param_group :deal do
+    param :includes, Array, desc: "Include relations for better perfomance"
     param :data, Hash, desc: "Deal Data", required: true do
       param :attributes, Hash, desc: "Deal Attributes", required: true do
         param :status, Deal::STATUSES, desc: "Deal status"
@@ -34,7 +35,7 @@ class DealsController < ApplicationController
   def index
     @deals = current_member.deals.in_status(params[:status] || Deal::IN_PROGRESS)
 
-    render json: @deals, includes: includes
+    render json: @deals, include: includes
   end
 
   api :GET, "deals/:id", "single deal"
@@ -44,7 +45,7 @@ class DealsController < ApplicationController
   example self.single_example
   def show
     @deal ||= Deal.find_by(id: params[:id])
-    render json: @deal, includes: includes
+    render json: @deal, include: includes
   end
 
   api :POST, "deals", "create deal"
@@ -56,7 +57,7 @@ class DealsController < ApplicationController
     @deal = current_courier.deals.new(deal_update_params)
 
     if @deal.save
-      render json: @deal, status: :created, includes: includes
+      render json: @deal, status: :created, include: includes
     else
       render json: @deal.errors, status: :unprocessable_entity
     end
@@ -72,7 +73,7 @@ class DealsController < ApplicationController
   def update
     if @deal.update(deal_update_params)
       handle_status_change if status_deal_param
-      render json: @deal, status: :ok, includes: includes
+      render json: @deal, status: :ok, include: includes
     else
       render json: @deal.errors, status: :unprocessable_entity
     end
@@ -81,7 +82,7 @@ class DealsController < ApplicationController
   private
 
   def set_deal
-    @deal ||= current_member.deals.find(params[:id])
+    @deal ||= current_member.deals.find_by(id: params[:id])
   end
 
   def deal_update_params
@@ -97,7 +98,7 @@ class DealsController < ApplicationController
   end
 
   def includes
-    %i(order)
+    %i(order) + (params[:includes] || [])
   end
 
   def handle_status_change
