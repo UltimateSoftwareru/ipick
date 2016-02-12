@@ -12,15 +12,4 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
   config.log_formatter = ::Logger::Formatter.new
   config.active_record.dump_schema_after_migration = false
-  config.action_mailer.default_url_options = {:host => 'ultimatesoftware.ru', :from => 'k.zenin@ultimatesoftware.ru'}
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:              'smtp.yandex.ru',
-    port:                 587,
-    domain:               'ultimatesoftware.ru',
-    user_name:            'ultimatesoftware@yandex.ru',
-    password:             'D9c-55y-y9F-Ar9',
-    authentication:       'plain',
-    enable_starttls_auto: true
-  }
 end
