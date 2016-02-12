@@ -4,7 +4,7 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.delivery_method = :letter_opener
+  # config.action_mailer.delivery_method = :letter_opener
   config.active_support.deprecation = :log
   config.active_record.migration_error = :page_load
   config.assets.debug = true
@@ -18,4 +18,15 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
   end
+  config.action_mailer.default_url_options = {:host => 'ultimatesoftware.ru', :from => 'k.zenin@ultimatesoftware.ru'}
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.yandex.ru',
+    port:                 587,
+    domain:               'ultimatesoftware.ru',
+    user_name:            'ultimatesoftware@yandex.ru',
+    password:             'D9c-55y-y9F-Ar9',
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
 end
