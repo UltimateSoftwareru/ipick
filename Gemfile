@@ -18,7 +18,6 @@ gem 'aws-sdk', '< 2.0'
 
 gem 'seedbank', '~> 0.3.0'
 gem 'ffaker', '~> 2.1'
-gem 'mailgun_rails', '~> 0.8.0'
 
 gem 'state_machine', '~> 1.2'
 
