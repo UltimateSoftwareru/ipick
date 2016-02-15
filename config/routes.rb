@@ -22,4 +22,6 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'Person', at: '/people/auth'
   mount_devise_token_auth_for 'Courier', at: '/couriers/auth'
   mount_devise_token_auth_for 'Operator', at: '/operators/auth'
+
+  get '/(*path)' => "home#index", as: :root, format: :html
 end
