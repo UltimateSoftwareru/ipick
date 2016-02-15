@@ -3,4 +3,4 @@ development:
 test:
   host: "http://localhost:4200"
 production:
-  host: "http://lit-falls-44319.herokuapp.com"
+  host: "http://localhost"
