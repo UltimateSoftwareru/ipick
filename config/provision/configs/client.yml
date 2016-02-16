@@ -3,4 +3,4 @@ development:
 test:
   host: "http://localhost:4200"
 production:
-  host: "http://localhost"
+  host: http://54.165.254.9
