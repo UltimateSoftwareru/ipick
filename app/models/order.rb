@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
   has_one :assigned_deal, -> { where(status: [Deal::IN_PROGRESS, Deal::DELIVERED]) }, class_name: :Deal
   has_many :complains
 
-  after_commit :notify_agents!
+  after_commit { OrderNotifyJob.perform_later(self) }
 
   OPENED = :opened
   ASSIGNED = :assigned
@@ -74,15 +74,5 @@ class Order < ActiveRecord::Base
   def create_deal(status, courier)
     deals.create(status: status, courier: courier)
     assign! if status == Deal::IN_PROGRESS
-  end
-
-  private
-
-  def notify_agents!
-    options = { include: [:person, :from_address, :addresses, :transports, :deals] }
-    order = ActiveModel::SerializableResource.new(self, options)
-
-    order_json = order.as_json
-    ActionCable.server.broadcast OrdersNotificationChannel.channel_name, order_json
   end
 end
