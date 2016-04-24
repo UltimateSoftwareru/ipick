@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.6'
 gem 'rails-api', '~> 0.4.0'
 gem 'active_model_serializers', '~> 0.10.0.rc4'
 gem 'rails-i18n', '~> 4.0.0'
@@ -15,6 +15,7 @@ gem "rmagick", "2.14.0", require: false
 gem 'geocoder', '~> 1.2', '>= 1.2.12'
 gem "concord", "~> 0.1.5"
 gem 'aws-sdk', '< 2.0'
+gem 'responders', '~> 2.1', '>= 2.1.2'
 
 gem 'seedbank', '~> 0.3.0'
 gem 'ffaker', '~> 2.1'
@@ -29,6 +30,7 @@ gem 'pager_api', '~> 0.1.1'
 gem 'actioncable', github: "rails/actioncable", branch: :archive
 
 gem 'sidekiq'
+gem 'rails_admin', '~> 0.8.1'
 
 group :development do
   gem "binding_of_caller", "0.7.1"
@@ -43,8 +45,9 @@ group :development do
   gem 'capistrano3-puma'
 end
 
-group :production do
+group :production, :staging do
   gem 'puma'
+  gem 'uglifier', '~> 3.0'
 end
 
 group :test do

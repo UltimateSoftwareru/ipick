@@ -1,4 +1,4 @@
-class AddressesController < ApplicationController
+class AddressesController < ApiController
   devise_token_auth_group :member, contains: [:person, :courier]
   before_action :authenticate_member!, only: [:show]
   before_action :authenticate_person!, only: [:index, :create, :update, :destroy]

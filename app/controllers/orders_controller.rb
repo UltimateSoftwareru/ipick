@@ -1,4 +1,4 @@
-class OrdersController < ApplicationController
+class OrdersController < ApiController
   devise_token_auth_group :member, contains: [:person, :courier, :operator]
   devise_token_auth_group :orderer, contains: [:person, :courier]
   before_action :authenticate_member!, only: [:index, :show]

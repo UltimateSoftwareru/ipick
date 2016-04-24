@@ -1,4 +1,4 @@
-class DealsController < ApplicationController
+class DealsController < ApiController
   devise_token_auth_group :member, contains: [:person, :courier, :operator]
   before_action :authenticate_member!, only: [:index, :show]
   before_action :authenticate_courier!, only: [:create, :update]

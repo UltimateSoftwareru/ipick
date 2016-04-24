@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  devise_for :admins, controllers: {
+    sessions: 'admins/sessions'
+  }
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   apipie
   resources :orders, only: [:index, :show, :create, :update]
   resources :complains, only: [:index, :show, :create, :update]
@@ -18,7 +22,9 @@ Rails.application.routes.draw do
     end
   end
 
-  mount_devise_token_auth_for 'User', at: 'auth'
+  mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+    sessions: 'users/sessions'
+  }
   mount_devise_token_auth_for 'Person', at: '/people/auth'
   mount_devise_token_auth_for 'Courier', at: '/couriers/auth'
   mount_devise_token_auth_for 'Operator', at: '/operators/auth'

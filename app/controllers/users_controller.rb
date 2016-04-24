@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ApiController
   before_action :set_current_resource, only: [:me, :update]
   before_action :set_resource, only: :show
 

@@ -1,4 +1,4 @@
-class ComplainsController < ApplicationController
+class ComplainsController < ApiController
   devise_token_auth_group :member, contains: [:person, :courier, :operator]
   devise_token_auth_group :complainer, contains: [:person, :courier]
   before_action :authenticate_complainer!, only: [:create]

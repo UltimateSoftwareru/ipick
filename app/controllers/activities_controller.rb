@@ -1,4 +1,4 @@
-class ActivitiesController < ApplicationController
+class ActivitiesController < ApiController
   devise_token_auth_group :member, contains: [:person, :courier, :operator]
   before_action :authenticate_member!, only: [:index, :show]
   before_action :load_courier, only: [:index]

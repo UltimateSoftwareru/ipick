@@ -59,23 +59,21 @@ class AdditionalFieldsToUser < ActiveRecord::Migration
     end
 
     change_table :users do |t|
-      unless column_exists? :users, :type
-        ## STI
-        t.string :type, null: false, default: "Person"
+      ## STI
+      t.string :type, null: false, default: "Person" unless column_exists? :users, :type
 
-        ## User Info
-        t.string :name
-        t.string :nickname
-        t.string :phone
+      ## User Info
+      t.string :name unless column_exists? :users, :name
+      t.string :nickname unless column_exists? :users, :nickname
+      t.string :phone unless column_exists? :users, :phone
 
-        ## Courier info
-        t.integer :status
-        t.integer :transport_id
+      ## Courier info
+      t.integer :status unless column_exists? :users, :status
+      t.integer :transport_id unless column_exists? :users, :transport_id
 
-        ## Geocoder
-        t.float :latitude
-        t.float :longitude
-      end
+      ## Geocoder
+      t.float :latitude unless column_exists? :users, :latitude
+      t.float :longitude unless column_exists? :users, :longitude
     end
   end
 end

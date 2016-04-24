@@ -3,7 +3,7 @@ class OrderNotifyJob < ApplicationJob
 
   def perform(order)
     options = { include: [:person, :from_address, :addresses, :transports, :deals] }
-    order = ActiveModel::SerializableResource.new(order, options).as_json
+    order = ActiveModelSerializers::SerializableResource.new(order, options).as_json
 
     ActionCable.server.broadcast OrdersNotificationChannel.channel_name, order
   end

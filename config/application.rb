@@ -6,11 +6,18 @@ Bundler.require(*Rails.groups)
 
 module Ipick
   class Application < Rails::Application
+    config.app_generators.scaffold_controller :responders_controller
+
+    config.middleware.use ActionDispatch::Flash
+    config.middleware.use Rack::MethodOverride
+    config.middleware.use ActionDispatch::Cookies
+
     config.action_mailer.default_url_options = { host: Rails.application.secrets.url }
     config.active_record.raise_in_transactional_callbacks = true
-    config.i18n.available_locales = :ru
+    config.i18n.available_locales = [:ru, :en]
     config.i18n.default_locale = :ru
 
+    config.api_only = false
     config.autoload_paths += ["#{config.root}/app/models/users/", "#{config.root}/app/controllers/users/"]
     config.middleware.insert_before 0, "Rack::Cors", debug: true, logger: (-> { Rails.logger }) do
       allow do

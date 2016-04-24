@@ -1,4 +1,4 @@
-class HomeController < ApplicationController
+class HomeController < ApiController
   include ActionController::RequestForgeryProtection
 
   SHORT_UUID_V4_REGEXP = /\A[0-9a-f]{7}\z/i
