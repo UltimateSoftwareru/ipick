@@ -1,4 +1,4 @@
-class ApiController < ApplicationController
+class ApiController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include PagerApi::Pagination::Kaminari
 

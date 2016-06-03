@@ -1,11 +1,11 @@
 development:
-  access_key_id: AKIAJ3YU3DC4SALKOPPA
-  secret_access_key: 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
+  access_key_id: AKIAIBLENOTBK7XPBWQA
+  secret_access_key: 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
 
 test:
-  access_key_id: AKIAJ3YU3DC4SALKOPPA
-  secret_access_key: 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
+  access_key_id: AKIAIBLENOTBK7XPBWQA
+  secret_access_key: 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
 
 production:
-  access_key_id: AKIAJ3YU3DC4SALKOPPA
-  secret_access_key: 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
+  access_key_id: AKIAIBLENOTBK7XPBWQA
+  secret_access_key: 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
